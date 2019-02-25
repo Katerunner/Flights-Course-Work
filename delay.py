@@ -1,0 +1,1 @@
+link = "https://ru.flightaware.com/live/cancelled/today/LWO"

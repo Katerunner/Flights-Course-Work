@@ -1,5 +1,6 @@
 import urllib.request
 from bs4 import BeautifulSoup
+import pprint
 
 def get_html(url):
     response = urllib.request.urlopen(url)
@@ -34,4 +35,25 @@ def parse(html):
             counter+=1
     return result
 
-print(parse(get_html("https://www.flightstats.com/v2/flight-tracker/route/LWO/IEV/?year=2019&month=2&date=24&hour=12")))
+# pprint.pprint(parse(get_html("https://www.flightstats.com/v2/flight-tracker/route/FRA/KTW/?year=2019&month=2&date=28&hour=12")))
+
+def flight(from_v, to_v, date):
+    date = date.split('.')
+    url = "https://www.flightstats.com/v2/flight-tracker/route/" + str(from_v) + "/" + str(to_v) + "/?year=" + date[2] + "&month=" + date[1] + "&date=" + date[0] + "&hour=12"
+    result = []
+    # cod = ""
+    # air = ""
+    # dep = ""
+    # arr = ""
+    main_d = parse(get_html(url))
+    if main_d == {}:
+        return ["Nothing found"]
+    for i in main_d:
+        result.append(str(i) + " Airline: " + str(main_d[i]['airline']) + " Departure: " + str(main_d[i]['depart']) + " Arrival: " + str(main_d[i]['arriv']))
+        # cod += str(i) + "\n"
+        # air += str(main_d[i]['airline']) + "\n"
+        # dep += str(main_d[i]['depart']) + "\n"
+        # arr += str(main_d[i]['arriv']) + "\n"
+    return result
+    # return cod, air, dep, arr
+

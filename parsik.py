@@ -40,6 +40,7 @@ def parse(html):
 def flight(from_v, to_v, date):
     date = date.split('.')
     url = "https://www.flightstats.com/v2/flight-tracker/route/" + str(from_v) + "/" + str(to_v) + "/?year=" + date[2] + "&month=" + date[1] + "&date=" + date[0] + "&hour=12"
+    print(url)
     result = []
     # cod = ""
     # air = ""
@@ -55,5 +56,4 @@ def flight(from_v, to_v, date):
         # dep += str(main_d[i]['depart']) + "\n"
         # arr += str(main_d[i]['arriv']) + "\n"
     return result
-    # return cod, air, dep, arr
-
+# return cod, air, dep, arr

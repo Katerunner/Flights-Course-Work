@@ -1,8 +1,9 @@
 import json
-import requests
 import urllib.request
 
-
+api = ""
+if api == "":
+    api = input("Enter OpenWeather api key: ")
 def weather_coord(lat,lon):
     urll = "https://api.openweathermap.org/data/2.5/weather?lat="
     urll += str(lat) + "&lon=" + str(lon) + "&appid=" + api
@@ -10,4 +11,4 @@ def weather_coord(lat,lon):
     obj = json.loads(x.read())
     return obj['weather'][0]['description'].capitalize()
 
-weather_coord(5, 14)
+# weather_coord(5, 14)

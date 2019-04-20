@@ -81,14 +81,13 @@ def get_plane(flight):
                 result = str(str(i.text).replace('var trackpollBootstrap = ', '').replace(';', ''))
 
         diktik = json.loads(result)
-        airline_logo = diktik['flights'][list(diktik['flights'].keys())[0]]['thumbnail']['imageUrl']
+        # airline_logo = diktik['flights'][list(diktik['flights'].keys())[0]]['thumbnail']['imageUrl']
         try:
             airplane = diktik['flights'][list(diktik['flights'].keys())[0]]['aircraft']['friendlyType']
         except:
             airplane = None
 
         print(airplane)
-        return (
-         airplane, airline_logo)
+        return airplane
 
     return parse(get_html(url))

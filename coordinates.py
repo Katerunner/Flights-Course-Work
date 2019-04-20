@@ -42,30 +42,3 @@ class Corray:
             self._elements[0] = Node("lat", value)
         else:
             self._elements[1] = Node("lon", value)
-
-    # Clears the array by setting each element to the given value.
-    def clear(self, value):
-        for i in range(len(self)):
-            self._elements[i] = value
-
-    # Returns the array's iterator for traversing the elements.
-    def __iter__(self):
-        return _ArrayIterator(self._elements)
-
-
-# An iterator for the Array ADT.
-class _ArrayIterator:
-    def __init__(self, the_array):
-        self._array_ref = the_array
-        self._cur_index = 0
-
-    def __iter__(self):
-        return self
-
-    def __next__(self):
-        if self._cur_index < len(self._array_ref):
-            entry = self._array_ref[self._cur_index]
-            self._cur_index += 1
-            return entry
-        else:
-            raise StopIteration

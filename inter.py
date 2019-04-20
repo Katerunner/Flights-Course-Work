@@ -250,6 +250,8 @@ def pre_final_cur():
 
         for i in range(len(te_1)):
             airline = te_1[i][1].split("/")[0].strip()
+            print("\n______________TE1_____________")
+            print(te_1)
             try:
                 # print(delik)
                 agp = aircrafts.get_plane(te_1[i][0])
@@ -258,7 +260,7 @@ def pre_final_cur():
                 # im = Image.open(io.BytesIO(raw_data))
                 # im = im.resize((25, 25), Image.ANTIALIAS)
                 # image = ImageTk.PhotoImage(im)
-                deli = aicnet.delay_extender(delik, agp[0])
+                deli = aicnet.delay_extender(delik, agp)
                 # print(te_1[i][0])
                 # print(agp)
                 # print(deli)

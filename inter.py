@@ -19,6 +19,11 @@ import io
 # from Image import ImageTk,Image
 import parsik
 
+# TODO: No internet connection
+# TODO: Google Flights reference
+# TODO: Data changing and time
+# TODO: Info widget
+
 codes = [0, 0]
 airport_names = []
 airs = ['Nothing', 'Nothing']
@@ -270,12 +275,11 @@ def pre_final_cur():
                 # im = Image.open(io.BytesIO(raw_data))
                 # im = im.resize((25, 25), Image.ANTIALIAS)
                 # image = ImageTk.PhotoImage(im)
-                deli = aicnet.delay_extender(delik, agp)
+                deli = aicnet.delay_extender(delik, agp[0])
                 # print(te_1[i][0])
                 # print(agp)
                 # print(deli)
             except Exception as a:
-                raise a
                 print(a)
                 deli = delik
 
@@ -291,17 +295,31 @@ def pre_final_cur():
                 color = "white"
             Label(table, text=te_1[i][0], width=10, bg="aliceblue", relief=GROOVE, borderwidth=2,
                   highlightbackground="deepskyblue", highlightcolor="deepskyblue", ).grid(row=i, column=1)
-            Label(table, text=airline, width=44, bg="aliceblue", justify=LEFT, relief=GROOVE, borderwidth=2,
-                  highlightbackground="deepskyblue", highlightcolor="deepskyblue", ).grid(row=i, column=2)
+
+            # im_info = Image.open("info_b.jpg")
+            # image_info = ImageTk.PhotoImage(im_info)
+            url = agp[1]
+            raw_data = urllib.request.urlopen(url).read()
+            im_airline = Image.open(io.BytesIO(raw_data))
+            im_airline = im_airline.resize((22, 22), Image.ANTIALIAS)
+            image_airline = ImageTk.PhotoImage(im_airline)
+            airline_l = Label(table, text="I", image = image_airline, width=20, height=22, bg="aliceblue", relief=GROOVE, borderwidth=2,
+                  highlightbackground="deepskyblue", highlightcolor="deepskyblue", )
+            airline_l.image = image_airline
+            airline_l.grid(row=i, column=2)
+
+
+            Label(table, text=airline, width=41, bg="aliceblue", justify=LEFT, relief=GROOVE, borderwidth=2,
+                  highlightbackground="deepskyblue", highlightcolor="deepskyblue", ).grid(row=i, column=3)
             Label(table, text=airnet.find_by_airname(airs[0]).city + " " + te_1[i][2], width=17, bg="aliceblue",
                   relief=GROOVE, borderwidth=2,
-                  highlightbackground="deepskyblue", highlightcolor="deepskyblue", ).grid(row=i, column=3)
+                  highlightbackground="deepskyblue", highlightcolor="deepskyblue", ).grid(row=i, column=4)
             Label(table, text=airnet.find_by_airname(airs[1]).city + " " + te_1[i][3], width=17, bg="aliceblue",
                   relief=GROOVE, borderwidth=2,
-                  highlightbackground="deepskyblue", highlightcolor="deepskyblue", ).grid(row=i, column=4)
+                  highlightbackground="deepskyblue", highlightcolor="deepskyblue", ).grid(row=i, column=5)
             Label(table, text=round(float(deli), 4), width=10, bg=color,
                   relief=GROOVE, borderwidth=2,
-                  highlightbackground="deepskyblue", highlightcolor="deepskyblue", ).grid(row=i, column=5)
+                  highlightbackground="deepskyblue", highlightcolor="deepskyblue", ).grid(row=i, column=6)
             # try:
             # a = Label(table)
             # a.image = image
@@ -470,5 +488,4 @@ def but_manage():
 
 
 but_manage()
-
 root.mainloop()

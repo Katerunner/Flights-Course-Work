@@ -3,19 +3,20 @@ from bs4 import BeautifulSoup
 import threading
 
 # http://tracker.flightview.com/customersetup/FlightViewWebFids/cachedFids/?vmode=departures&Apt=FRA&mainPage=tracker.flightview.com
-link_all = "https://tracker.flightview.com/FVAccess2/tools/fids/fidsDefault.asp?accCustId=FVWebFids&fidsId=20001&fidsInit=departures&fidsApt=FRA&fidsFilterAl=&fidsFilterArrap="
+# link_all = "https://tracker.flightview.com/FVAccess2/tools/fids/fidsDefault.asp?accCustId=FVWebFids&fidsId=20001&fidsInit=departures&fidsApt=FRA&fidsFilterAl=&fidsFilterArrap="
 # https://www.google.com/flights#flt=FRA.KTW.2019-03-24*KTW.FRA.2019-03-28;c:UAH;e:1;sd:1;t:f
 # link = "https://www.flightview.com/airport/FRA/departures"
 
-link_delay = "https://flightaware.com/live/cancelled/yesterday/FRA"
+# link_delay = "https://flightaware.com/live/cancelled/yesterday/FRA"
 
 
 class Delay:
     def __init__(self, code):
         self.code = code
-        self.link_all = "https://tracker.flightview.com/FVAccess2/tools/fids/fidsDefault.asp?accCustId=FVWebFids&fidsId=20001&fidsInit=departures&fidsApt={}".format(
+        self.link_all = "https://tracker.flightview.com/FVAccess2/tools/fids/fidsDefault.asp?accCustId=FVWebFids&fidsId=20001&fidsInit=arrivals&fidsApt={}".format(
             code)
         self.link_delay = "https://flightaware.com/live/cancelled/yesterday/{}".format(code)
+        print(self.link_all)
 
     @staticmethod
     def get_html(url):
@@ -50,7 +51,7 @@ class Delay:
         # print((result.count("Delayed") + result.count("Cancelled") + result.count(
         #     "No Takeoff Info - Call Airline") - 2 + result.count('No Recent Info - Call Airline')) / length)
         return (result.count("Delayed") + result.count("Cancelled") + result.count(
-            "No Takeoff Info - Call Airline") - 2 + result.count('No Recent Info - Call Airline') / 2) / length
+            "No Takeoff Info - Call Airline") - 2 + result.count('No Recent Info - Call Airline') / 4) / length
 
     @staticmethod
     def parse_a(html):

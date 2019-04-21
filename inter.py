@@ -4,11 +4,14 @@ import aircrafts
 import delay
 import weather
 from tkinter import *
+from functools import partial
 import map
 import datetime
 import time
 from coordinates import Corray
-import sys
+import webbrowser
+import os
+import copy
 import urllib.request
 from PIL import Image, ImageTk
 import io
@@ -48,7 +51,6 @@ menubar = 0
 
 
 def donothing():
-    import webbrowser, os
     map.update_map(codes[0], codes[1])
     webbrowser.open('file://' + os.path.realpath('map.html'))
 
@@ -214,6 +216,11 @@ but_menu()
 print(air)
 
 
+def link_to_flight(flight):
+    link = 'https://flightaware.com/live/flight/{}'.format(aircrafts.format_flight(flight))
+    webbrowser.open(link)
+
+
 def pre_final_cur():
     global date, table
     now = datetime.datetime.now()
@@ -225,6 +232,7 @@ def pre_final_cur():
                  height=2, bg="lightblue")
     pref.grid(row=9, columnspan=2)
     te_1 = parsik.flight(codes[0], codes[1], date)
+    # No internet
     print(te_1)
     if te_1 != ['Nothing found']:
         scrollbar = Scrollbar(table)
@@ -247,9 +255,11 @@ def pre_final_cur():
         #
         # for i in range(5):
         #     Label(table, image=image).grid(column=0, row=i)
-
+        for_info = []
+        for_info.clear()
         for i in range(len(te_1)):
             airline = te_1[i][1].split("/")[0].strip()
+            for_info.append(te_1[i][0])
             print("\n______________TE1_____________")
             print(te_1)
             try:
@@ -298,8 +308,26 @@ def pre_final_cur():
             # a.configure(image = image, width=14)
             # a.grid(row=i, column=0)
             # except:
-            Label(table, text=i, width=10, bg="aliceblue", justify=LEFT, relief=GROOVE, borderwidth=2,
-                  highlightbackground="deepskyblue", highlightcolor="deepskyblue", ).grid(row=i, column=0)
+
+            # im_exit = Image.open("exit_b.jpg")
+            # image_exit = ImageTk.PhotoImage(im_exit)
+            # exit_b = Button(top_menu, bg='red', image=image_exit, width=43, height=33, text="Exit", cursor="hand2",
+            #                 command=root.quit)
+            # exit_b.image = image_exit
+            # exit_b.grid(column=9, row=0)
+
+            action_with_arg = partial(link_to_flight, for_info[i])
+            im_info = Image.open("info_b.jpg")
+            image_info = ImageTk.PhotoImage(im_info)
+            info_b = Button(table, text=i, width=83, height=20, image=image_info, bg="aliceblue", justify=LEFT,
+                            relief=GROOVE, borderwidth=2,
+                            highlightbackground="deepskyblue", highlightcolor="deepskyblue", command=action_with_arg)
+            info_b.image = image_info
+            info_b.grid(row=i, column=0)
+            info_b.bind("<Enter>", lambda e: e.widget.config(relief=RIDGE))
+            info_b.bind("<Leave>", lambda e: e.widget.config(relief=GROOVE))
+            # a.bind("<Button-1>", action_with_arg)
+            root.update()
             # st = Label(table, text = parsik.flight(codes[0],codes[1]), width = 112, bg = "aliceblue")
             # st.pack()
     else:
@@ -338,7 +366,7 @@ def upd_con():
     print(Lb1.curselection()[0])
     cursl = sorted([(i.city, i.name) for i in airnet.airdat if i.country == countries[Lb1.curselection()[0]]])
     country = cursl
-    print(cursl)
+    # print(cursl)
     Lb2 = Listbox(main, width=55, cursor="sb_right_arrow")
     B2.destroy()
     B2 = Button(main, text='Choose airport', cursor="hand2", width=55, command=upd_air, bg='skyblue')
@@ -434,7 +462,7 @@ def date_ch():
 
 def but_manage():
     global but_list
-    but_list += [B1, B3, B4]
+    but_list += [B1, B2, B3, B4]
     but_list = list(set(but_list))
     for i in but_list:
         i.bind("<Enter>", lambda e: e.widget.config(relief=RIDGE))

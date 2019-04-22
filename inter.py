@@ -1,4 +1,3 @@
-import datetime
 import airports
 import aircrafts
 import delay
@@ -15,6 +14,8 @@ import urllib.request
 from PIL import Image, ImageTk
 import io
 import parsik
+import copy
+import searchik
 
 # TODO: No internet connection
 # TODO: Google Flights reference
@@ -47,6 +48,8 @@ root.geometry("{0}x{1}+0+0".format(width, height))
 main = Frame(root, bg='aliceblue', borderwidth=2, highlightbackground="deepskyblue", highlightcolor="deepskyblue",
              highlightthickness=3)
 table = Frame(main, bg='aliceblue')
+scrollbar = Scrollbar(root)
+scrollbar.pack( side = RIGHT, fill=Y )
 main.pack()
 top_menu = 0
 menubar = 0
@@ -155,10 +158,10 @@ def but_menu():
     Label(top_menu, width=8, bg='aliceblue', text="Today:", font=('Marcellus SC', 12)).grid(column=4, row=0)
     Label(top_menu, width=8, bg='aliceblue', text="Time:", font=('Marcellus SC', 12)).grid(column=6, row=0)
 
-    date_w = Label(top_menu, bg='aliceblue', font=('Marcellus SC', 12), width=8)
+    date_w = Label(top_menu, bg='aliceblue', font=('Marcellus SC', 12), width=9)
     date_w.grid(column=5, row=0)
 
-    time_w = Label(top_menu, bg='aliceblue', font=('Marcellus SC', 12), width=7)
+    time_w = Label(top_menu, bg='aliceblue', font=('Marcellus SC', 12), width=6)
     time_w.grid(column=7, row=0)
 
     def tick():
@@ -261,9 +264,14 @@ def pre_final_cur():
     info_wait_start()
     root.update()
     now = datetime.datetime.now()
-    table.destroy()
-    table = Frame(main, bg="lightblue")
-    table.grid(row=11, columnspan=2)
+    try:
+        table.destroy()
+    except:
+        pass
+    canvas = Canvas(main, bg = "white", height = 12)
+    table = Frame(canvas, bg="white", height = 12)
+    canvas.grid(row=11, columnspan=2)
+    table.pack(side="left",fill="y")
     date = str(now.day) + "." + str(now.month) + "." + str(now.year)
     pref = Label(main, text="Flights from " + str(codes[0]) + " to " + str(codes[1]) + " on " + date + ":", width=112,
                  height=2, bg="lightblue")
@@ -296,6 +304,10 @@ def pre_final_cur():
         for_info.clear()
         for i in range(len(te_1)):
             airline = te_1[i][1]
+            try:
+                airline = airline[:airline.index(' on ')]
+            except:
+                pass
             for_info.append(te_1[i][0])
             print("\n______________TE1_____________")
             print(te_1)
@@ -312,6 +324,7 @@ def pre_final_cur():
                 # print(agp)
                 # print(deli)
             except Exception as a:
+                raise a
                 print(a)
                 deli = delik
 
@@ -325,7 +338,7 @@ def pre_final_cur():
                 color = "red"
             else:
                 color = "white"
-            Label(table, text=te_1[i][0], width=10, bg="aliceblue", relief=GROOVE, borderwidth=2,
+            Label(table, text=te_1[i][0], width=9, bg="aliceblue", relief=GROOVE, borderwidth=2,
                   highlightbackground="deepskyblue", highlightcolor="deepskyblue", ).grid(row=i, column=1)
 
             # im_info = Image.open("info_b.jpg")
@@ -341,7 +354,7 @@ def pre_final_cur():
             airline_l.image = image_airline
             airline_l.grid(row=i, column=2)
 
-            Label(table, text=airline, width=41, bg="aliceblue", justify=LEFT, relief=GROOVE, borderwidth=2,
+            Label(table, text=airline, width=46, bg="aliceblue", justify=LEFT, relief=GROOVE, borderwidth=2,
                   highlightbackground="deepskyblue", highlightcolor="deepskyblue", ).grid(row=i, column=3)
             Label(table, text=airnet.find_by_airname(airs[0]).city + " " + te_1[i][2], width=17, bg="aliceblue",
                   relief=GROOVE, borderwidth=2,
@@ -349,7 +362,7 @@ def pre_final_cur():
             Label(table, text=airnet.find_by_airname(airs[1]).city + " " + te_1[i][3], width=17, bg="aliceblue",
                   relief=GROOVE, borderwidth=2,
                   highlightbackground="deepskyblue", highlightcolor="deepskyblue", ).grid(row=i, column=5)
-            Label(table, text=round(float(deli), 4), width=10, bg=color,
+            Label(table, text=round(float(deli), 3), width=6, bg=color,
                   relief=GROOVE, borderwidth=2,
                   highlightbackground="deepskyblue", highlightcolor="deepskyblue", ).grid(row=i, column=6)
             # try:
@@ -376,6 +389,7 @@ def pre_final_cur():
             info_b.grid(row=i, column=0)
             info_b.bind("<Enter>", lambda e: e.widget.config(relief=RIDGE))
             info_b.bind("<Leave>", lambda e: e.widget.config(relief=GROOVE))
+            # myscrollbar.grid(rowspan=i+2)
             # a.bind("<Button-1>", action_with_arg)
             root.update()
             # st = Label(table, text = parsik.flight(codes[0],codes[1]), width = 112, bg = "aliceblue")
@@ -406,15 +420,21 @@ def set_arriv():
 
 
 def upd_con():
-    global B2, Lb2, airport_names, country, cities
+    global B2, Lb2, airport_names, country, cities, cit_copy, En2, text2
     try:
         L1.grid(row=4)
         temp = Lb1.curselection()[0]
         temp_l.destroy()
+        Lb2.destroy()
+        En2.destroy()
+        text2.set("Type airport to search")
+        En2 = Entry(main, width=55, textvariable=text2, fg="gray")
+        En2.bind("<Button-1>", lambda e: text2.set(""))
+        En2.grid(row=1, column=1)
     except:
         pass
     print(Lb1.curselection()[0])
-    cursl = sorted([(i.city, i.name) for i in airnet.airdat if i.country == countries[Lb1.curselection()[0]]])
+    cursl = sorted([(i.city, i.name) for i in airnet.airdat if i.country == countries[::-1][Lb1.curselection()[0]]])
     country = cursl
     # print(cursl)
     Lb2 = Listbox(main, width=55, cursor="sb_right_arrow")
@@ -424,10 +444,48 @@ def upd_con():
     cities = []
     for i in cursl:
         cities.append(i[1])
-        Lb2.insert(END, str(i[0]) + ", " + str(i[1]))
+
+    for i in cities:
+        Lb2.insert(END, airnet.find_by_airname(i).city + ", " + str(i))
+
+    cit_copy = copy.copy(cities)
+
+    def lb2_update():
+        global cities, cit_copy
+        if cit_copy != cities:
+            # print("Copy:", cit_copy)
+            # print("Actual:", cities)
+            Lb2.delete(0, END)
+            for i in cities[::-1]:
+                Lb2.insert(END, airnet.find_by_airname(i).city + ", " + str(i))
+            cit_copy = copy.copy(cities)
+        Lb2.after(200, lb2_update)
+
+    try:
+        lb2_update()
+    except Exception as a:
+        print(a)
+
+    def en2_update():
+        global cities, cit_copy
+        if text2.get() == "" or text2.get() == "Type airport to search":
+            cities = []
+            for i in cursl[::-1]:
+                cities.append(i[1])
+        elif text2.get() != "Type airport to search" and text2.get() != "":
+            cities = searchik.searchik(cities, text2.get())
+        En2.after(200, en2_update)
+
+    try:
+        en2_update()
+    except Exception as a:
+        print(a)
+
+
     # for i in findflight.airports[cursl]:
     #     Lb2.insert(END, findflight.name_city_loc[list(i.keys())[0]][0] + ", " + list(i.keys())[0])
     #     airport_names.append(list(i.keys())[0])
+
     Lb2.grid(row=2, column=1)
     B2.grid(row=3, column=1)
     B2.bind("<Enter>", lambda e: e.widget.config(relief=RIDGE))
@@ -438,10 +496,10 @@ def upd_air():
     global air, L1, cur_code, Lb3, Lb4, cities
     # cursl = airport_names[Lb2.curselection()[0]]
     for i in airnet.airdat:
-        if i.name == cities[Lb2.curselection()[0]]:
+        if i.name == cities[::-1][Lb2.curselection()[0]]:
             cur_code = i.code_3
     # # print(Lb2.curselection())
-    air = cities[Lb2.curselection()[0]]
+    air = cities[::-1][Lb2.curselection()[0]]
     # cur_code = findflight.find_code(cursl, country)
     L1.destroy()
     L1 = Label(main, text="Selected airport:  '" + air + "'", cursor="hand2", width=112, bg='aliceblue')
@@ -457,9 +515,60 @@ def upd_air():
     # Lb2.grid(row=1, column=1)
     # print(airport_names)
 
+countries = []
+for i in sorted(list(set([i.country for i in airnet.airdat]))):
+    countries.append(i)
+
+con_copy = copy.copy(countries)
 
 title = Label(main, text='Choose the country and airport for departure and for arrival', width=112, bg='aliceblue')
+
 Lb1 = Listbox(main, width=55, cursor="sb_left_arrow")
+
+for i in countries:
+    Lb1.insert(END, i)
+
+def lb1_update():
+    global countries, con_copy
+    if con_copy != countries:
+        Lb1.delete(0, END)
+        for i in countries[::-1]:
+            Lb1.insert(END, i)
+        con_copy = copy.copy(countries)
+    Lb1.after(200, lb1_update)
+
+try:
+    lb1_update()
+except Exception as a:
+    print(a)
+
+
+text1 = StringVar()
+text1.set("Type country to search")
+text2 = StringVar()
+text2.set("Type airport to search")
+En1 = Entry(main, width=55, textvariable=text1, fg = "gray")
+En1.bind("<Button-1>", lambda e: text1.set(""))
+En2 = Entry(main, width=55, textvariable=text2, fg = "gray")
+En2.bind("<Button-1>", lambda e: text2.set(""))
+# En1.bind("<Leave>", lambda e: text1.set("Type country to search"))
+
+
+def en1_update():
+    global countries, con_copy
+    if text1.get() == "" or text1.get() == "Type country to search":
+        countries = []
+        for i in sorted(list(set([i.country for i in airnet.airdat])))[::-1]:
+            countries.append(i)
+    elif text1.get() != "Type country to search" and text1.get() != "":
+        countries = searchik.searchik(countries, text1.get())
+    En1.after(200, en1_update)
+
+try:
+    en1_update()
+except Exception as a:
+    print(a)
+
 temp_l = Label(main, text='Choose country and you will be able to select airport', width=55, height=10,
                bg='deepskyblue')
 # Lb2 = Listbox(root, width = 35)
@@ -468,28 +577,26 @@ B2 = Button(main, width=55, bg='skyblue')
 L1 = Label(main, text="Selected Airport", width=112, bg='aliceblue')
 B3 = Button(main, text="Departure", cursor="hand2", width=55, command=set_depar, bg='skyblue')
 B4 = Button(main, text="Arrival", cursor="hand2", width=55, command=set_arriv, bg='skyblue')
+
 # L2 = Label(root, text = depart_ar, width = 55)
 # L2 = Label(root, text = arriv_ar, width = 55)
-countries = []
-for i in sorted(list(set([i.country for i in airnet.airdat]))):
-    countries.append(i)
-    Lb1.insert(END, i)
+
 title.grid(row=0, columnspan=2)
 Lb1.grid(row=2, column=0)
 B1.grid(row=3, column=0)
 temp_l.grid(row=2, column=1)
+En1.grid(row = 1, column = 0)
+En2.grid(row = 1, column = 1)
 B2.grid(row=3, column=1)
 L1.grid(row=4, columnspan=2)
 L4 = Label(main, text="(!) Departure and arrival airports can not be the same (!)")
 L5 = Label(main, text="Enter date in format: 01.01.2020, or choose today's", width=55, bg='aliceblue')
-E1 = Entry(main, width=55, justify=CENTER)
 
 
 def date_ch():
-    global L4, L5, E1, B5, B6
+    global L4, L5, B5, B6
     L4.destroy()
     L5.destroy()
-    E1.destroy()
     if codes[0] != 0 and codes[1] != 0 and codes[0] == codes[1]:
         try:
             B5.destroy()
@@ -515,7 +622,6 @@ def date_ch():
             i.bind("<Leave>", lambda e: e.widget.config(relief=RAISED))
 
         print(airs)
-
 
 def but_manage():
     global but_list

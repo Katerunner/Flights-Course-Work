@@ -80,15 +80,14 @@ def get_plane(flight):
             if 'var trackpollBootstrap = ' in str(i):
                 result = str(str(i.text).replace('var trackpollBootstrap = ', '').replace(';', ''))
 
-        diktik = json.loads(result)
         try:
+            print("OK")
+            diktik = json.loads(result)
             airline_logo = diktik['flights'][list(diktik['flights'].keys())[0]]['thumbnail']['imageUrl']
-        except:
-            airline_logo = "https://resource.alaskaair.net/-/media/Images/campaigns/2019-brand-campaign/AA_2019_New-Airplane-Icon_midB-01?v=1"
-        try:
             airplane = diktik['flights'][list(diktik['flights'].keys())[0]]['aircraft']['friendlyType']
         except:
-            airplane = None
+            airplane = "B737"
+            airline_logo = "https://resource.alaskaair.net/-/media/Images/campaigns/2019-brand-campaign/AA_2019_New-Airplane-Icon_midB-01?v=1"
 
         print(airplane)
         return airplane, airline_logo

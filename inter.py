@@ -11,12 +11,9 @@ import time
 from coordinates import Corray
 import webbrowser
 import os
-import copy
 import urllib.request
 from PIL import Image, ImageTk
 import io
-
-# from Image import ImageTk,Image
 import parsik
 
 # TODO: No internet connection
@@ -53,6 +50,39 @@ table = Frame(main, bg='aliceblue')
 main.pack()
 top_menu = 0
 menubar = 0
+
+
+def info_wait_start():
+    global info_tab, info_f
+    info_f = Frame(root, borderwidth=2, highlightbackground="yellow", highlightcolor="yellow",
+                   highlightthickness=3)
+    info_f.place(x=1600, y=100)
+    info_tab = Label(info_f,
+                     text="Please wait\n\nTry not to click\nLoading can take much time\n\nThis message will disappear\nafter calculation finishes\n\n{}",
+                     bg="lemonchiffon", width=25, height=10)
+    info_tab['text'] = info_tab['text'].format("|")
+    info_tab.pack()
+
+    def loading():
+        global info_tab
+        if info_tab['text'][-1] == "|":
+            text = "\\"
+        elif info_tab['text'][-1] == "\\":
+            text = u"\u2014"
+        elif info_tab['text'][-1] == u"\u2014":
+            text = "/"
+        elif info_tab['text'][-1] == "/":
+            text = "|"
+        info_tab.config(text=info_tab['text'][:-1] + text)
+        info_tab.after(200, loading)
+    try:
+        loading()
+    except Exception as a:
+        print(a)
+
+def info_wait_destroy():
+    info_f.destroy()
+
 
 
 def donothing():
@@ -227,15 +257,17 @@ def link_to_flight(flight):
 
 
 def pre_final_cur():
-    global date, table
+    global date, table, pref
+    info_wait_start()
+    root.update()
     now = datetime.datetime.now()
     table.destroy()
     table = Frame(main, bg="lightblue")
-    table.grid(row=10, columnspan=2)
+    table.grid(row=11, columnspan=2)
     date = str(now.day) + "." + str(now.month) + "." + str(now.year)
     pref = Label(main, text="Flights from " + str(codes[0]) + " to " + str(codes[1]) + " on " + date + ":", width=112,
                  height=2, bg="lightblue")
-    pref.grid(row=9, columnspan=2)
+    pref.grid(row=10, columnspan=2)
     te_1 = parsik.flight(codes[0], codes[1], date)
     # No internet
     print(te_1)
@@ -263,7 +295,7 @@ def pre_final_cur():
         for_info = []
         for_info.clear()
         for i in range(len(te_1)):
-            airline = te_1[i][1].split("/")[0].strip()
+            airline = te_1[i][1]
             for_info.append(te_1[i][0])
             print("\n______________TE1_____________")
             print(te_1)
@@ -303,11 +335,11 @@ def pre_final_cur():
             im_airline = Image.open(io.BytesIO(raw_data))
             im_airline = im_airline.resize((22, 22), Image.ANTIALIAS)
             image_airline = ImageTk.PhotoImage(im_airline)
-            airline_l = Label(table, text="I", image = image_airline, width=20, height=22, bg="aliceblue", relief=GROOVE, borderwidth=2,
-                  highlightbackground="deepskyblue", highlightcolor="deepskyblue", )
+            airline_l = Label(table, text="I", image=image_airline, width=20, height=22, bg="aliceblue", relief=GROOVE,
+                              borderwidth=2,
+                              highlightbackground="deepskyblue", highlightcolor="deepskyblue", )
             airline_l.image = image_airline
             airline_l.grid(row=i, column=2)
-
 
             Label(table, text=airline, width=41, bg="aliceblue", justify=LEFT, relief=GROOVE, borderwidth=2,
                   highlightbackground="deepskyblue", highlightcolor="deepskyblue", ).grid(row=i, column=3)
@@ -351,14 +383,14 @@ def pre_final_cur():
     else:
         print("i'm here")
         Label(table, text="Nothing found", width=112, bg='yellow').grid(row=0, column=0)
-
+    info_wait_destroy()
 
 def set_depar():
     global cur_code
     codes[0] = cur_code
     airs[0] = air
     L2 = Label(main, text='From: ' + air + " (" + str(codes[0]) + ")", width=55, bg='aliceblue')
-    L2.grid(row=5)
+    L2.grid(row=6)
     date_ch()
     print(codes)
 
@@ -368,7 +400,7 @@ def set_arriv():
     codes[1] = cur_code
     airs[1] = air
     L3 = Label(main, text='To: ' + air + " (" + str(codes[1]) + ")", width=55, bg='aliceblue')
-    L3.grid(row=5, column=1)
+    L3.grid(row=6, column=1)
     date_ch()
     print(codes)
 
@@ -376,7 +408,7 @@ def set_arriv():
 def upd_con():
     global B2, Lb2, airport_names, country, cities
     try:
-        L1.grid(row=3)
+        L1.grid(row=4)
         temp = Lb1.curselection()[0]
         temp_l.destroy()
     except:
@@ -396,8 +428,10 @@ def upd_con():
     # for i in findflight.airports[cursl]:
     #     Lb2.insert(END, findflight.name_city_loc[list(i.keys())[0]][0] + ", " + list(i.keys())[0])
     #     airport_names.append(list(i.keys())[0])
-    Lb2.grid(row=1, column=1)
-    B2.grid(row=2, column=1)
+    Lb2.grid(row=2, column=1)
+    B2.grid(row=3, column=1)
+    B2.bind("<Enter>", lambda e: e.widget.config(relief=RIDGE))
+    B2.bind("<Leave>", lambda e: e.widget.config(relief=RAISED))
 
 
 def upd_air():
@@ -411,9 +445,9 @@ def upd_air():
     # cur_code = findflight.find_code(cursl, country)
     L1.destroy()
     L1 = Label(main, text="Selected airport:  '" + air + "'", cursor="hand2", width=112, bg='aliceblue')
-    L1.grid(row=3, columnspan=2)
-    B3.grid(row=4, column=0)
-    B4.grid(row=4, column=1)
+    L1.grid(row=4, columnspan=2)
+    B3.grid(row=5, column=0)
+    B4.grid(row=5, column=1)
     print(country)
     # Lb2 = Listbox(root, width = 35)
     # airport_names = []
@@ -441,11 +475,11 @@ for i in sorted(list(set([i.country for i in airnet.airdat]))):
     countries.append(i)
     Lb1.insert(END, i)
 title.grid(row=0, columnspan=2)
-Lb1.grid(row=1, column=0)
-B1.grid(row=2, column=0)
-temp_l.grid(row=1, column=1)
-B2.grid(row=2, column=1)
-L1.grid(row=3, columnspan=2)
+Lb1.grid(row=2, column=0)
+B1.grid(row=3, column=0)
+temp_l.grid(row=2, column=1)
+B2.grid(row=3, column=1)
+L1.grid(row=4, columnspan=2)
 L4 = Label(main, text="(!) Departure and arrival airports can not be the same (!)")
 L5 = Label(main, text="Enter date in format: 01.01.2020, or choose today's", width=55, bg='aliceblue')
 E1 = Entry(main, width=55, justify=CENTER)
@@ -457,19 +491,24 @@ def date_ch():
     L5.destroy()
     E1.destroy()
     if codes[0] != 0 and codes[1] != 0 and codes[0] == codes[1]:
+        try:
+            B5.destroy()
+            B6.destroy()
+        except:
+            pass
         L4 = Label(main, text="(!) Departure and arrival airports can not be the same (!)", width=112, bg='lightcoral')
-        L4.grid(row=6, columnspan=2)
+        L4.grid(row=7, columnspan=2)
     elif codes[0] != 0 and codes[1] != 0:
         L4 = Label(main, text="Enter or choose approximate date", width=112, bg='aliceblue')
-        L4.grid(row=6, columnspan=2)
+        L4.grid(row=7, columnspan=2)
         L5 = Label(main, text="Enter date in format: 11.1.2020, or choose today's", width=55, bg='aliceblue')
-        L5.grid(row=7, column=0)
+        L5.grid(row=8, column=0)
         E1 = Entry(main, width=55, justify=CENTER)
-        E1.grid(row=7, column=1)
+        E1.grid(row=8, column=1)
         B5 = Button(main, text="Current data", cursor="hand2", width=55, bg='skyblue', command=pre_final_cur)
         B6 = Button(main, text="Choose data", cursor="hand2", width=55, bg='skyblue')
-        B5.grid(row=8, column=0)
-        B6.grid(row=8, column=1)
+        B5.grid(row=9, column=0)
+        B6.grid(row=9, column=1)
         but_list2 = [B5, B6]
         for i in but_list2:
             i.bind("<Enter>", lambda e: e.widget.config(relief=RIDGE))

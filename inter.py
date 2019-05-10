@@ -19,9 +19,6 @@ import copy
 import searchik
 
 # TODO: No internet connection
-# TODO: Google Flights reference
-# TODO: Data changing and time
-# TODO: Info widget
 
 codes = [0, 0]
 airport_names = []
@@ -52,53 +49,14 @@ table = Frame(main, bg='aliceblue')
 main.pack()
 
 
-def news_f():
-    root2 = Tk()
-    root2.title('News')
-    root2.iconbitmap('airplane.ico')
-    main2 = Frame(root2, bg="aliceblue")
-    main2.pack(fill=X)
-    title = Label(main2, text="Latest Safety Occurrences", font=('Marcellus SC', 12), bg='aliceblue', borderwidth=2,
-                  highlightbackground="deepskyblue",
-                  highlightcolor="deepskyblue",
-                  highlightthickness=1)
-    title.grid(row=0, column=0)
-    link_so = 'https://aviation-safety.net/'
-    link_nn = 'http://www.airport-world.com/'
-
-    def go_so():
-        webbrowser.open(link_so)
-
-    def go_nn():
-        webbrowser.open(link_nn)
-
-    but_so = Button(main2, bg='skyblue', text="Aviation safety news", command=go_so)
-    but_nn = Button(main2, bg='skyblue', text="Airport world news", command=go_nn)
-    but_so.grid(row=0, column=1)
-    but_nn.grid(row=0, column=2)
-    but_so.bind("<Enter>", lambda e: e.widget.config(relief=RIDGE))
-    but_so.bind("<Leave>", lambda e: e.widget.config(relief=RAISED))
-    but_nn.bind("<Enter>", lambda e: e.widget.config(relief=RIDGE))
-    but_nn.bind("<Leave>", lambda e: e.widget.config(relief=RAISED))
-    table2 = Frame(root2, bg='aliceblue', borderwidth=2, highlightbackground="deepskyblue",
-                   highlightcolor="deepskyblue",
-                   highlightthickness=3)
-    table2.pack()
-    for i in range(6):
-        Label(table2, text=news.title[i]).grid(row=1, column=i)
-    for i in range(4):
-        for j in range(6):
-            Label(table2, text=news.result[i][j]).grid(row=i + 2, column=j)
-    root2.mainloop()
-
 def git_f():
     webbrowser.open("https://github.com/Katerunner/Flights-Course-Work")
 
-news_b = Button(root, height=2, width=6, text="News", font=('Marcellus SC', 12), bg='skyblue', command=news_f)
+news_b = Button(root, height=2, width=12, text="Airport News", font=('Marcellus SC', 12), bg='skyblue', command=news.news_f)
 news_b.place(x=3, y=500)
 news_b.bind("<Enter>", lambda e: e.widget.config(relief=RIDGE))
 news_b.bind("<Leave>", lambda e: e.widget.config(relief=RAISED))
-git_b = Button(root, height=2, width=6, text="GitHub", font=('Marcellus SC', 12), bg='skyblue', command=git_f)
+git_b = Button(root, height=2, width=12, text="GitHub Repo.", font=('Marcellus SC', 12), bg='skyblue', command=git_f)
 git_b.place(x=3, y=570)
 git_b.bind("<Enter>", lambda e: e.widget.config(relief=RIDGE))
 git_b.bind("<Leave>", lambda e: e.widget.config(relief=RAISED))
@@ -336,6 +294,21 @@ def link_to_flight(flight):
 
 def pre_final_cur(inputed_date):
     global date, table, pref, canvas
+    print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1111")
+    print(codes[0], codes[1], inputed_date)
+
+    def gf_f(c1, c2, indate):
+        if not indate:
+            today = datetime.datetime.today()
+            tomorrow = today + datetime.timedelta(1)
+            indate = datetime.datetime.strftime(tomorrow,'%Y-%m-%d')
+        webbrowser.open("https://www.google.com/flights?flt={}.{}.{}".format(c1, c2, indate))
+
+    gf_b = Button(root, height=2, width=12, text="Google Flights", font=('Marcellus SC', 12), bg='skyblue', command=lambda:gf_f(codes[0], codes[1], inputed_date))
+    gf_b.place(x=3, y=640)
+    gf_b.bind("<Enter>", lambda e: e.widget.config(relief=RIDGE))
+    gf_b.bind("<Leave>", lambda e: e.widget.config(relief=RAISED))
+
     info_wait_start()
     root.update()
     now = datetime.datetime.now()
@@ -365,10 +338,7 @@ def pre_final_cur(inputed_date):
         weath = weather.Weather()
         temp = airnet.find_by_airname(airs[1])
         weathik = Corray(temp.lat, temp.lon)
-        if inputed_date:
-            weath.weather_coord_forecast(weathik, inputed_date)
-        else:
-            weath.weather_coord(weathik)
+        weath.weather_coord_forecast(weathik, inputed_date)
         delik = delay.Delay(temp.code_3).alter_del()
         delik += weath.danger()
 
@@ -441,7 +411,7 @@ def pre_final_cur(inputed_date):
             Label(table, text=airnet.find_by_airname(airs[1]).city + " " + te_1[i][3], width=17, bg="aliceblue",
                   relief=GROOVE, borderwidth=2,
                   highlightbackground="deepskyblue", highlightcolor="deepskyblue", ).grid(row=i, column=5)
-            Label(table, text=round(float(deli), 3), width=6, bg=color,
+            Label(table, text=round(float(deli), 3)*5, width=6, bg=color,
                   relief=GROOVE, borderwidth=2,
                   highlightbackground="deepskyblue", highlightcolor="deepskyblue", ).grid(row=i, column=6)
             # try:

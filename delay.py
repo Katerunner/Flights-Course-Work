@@ -16,7 +16,7 @@ class Delay:
         self.link_all = "https://tracker.flightview.com/FVAccess2/tools/fids/fidsDefault.asp?accCustId=FVWebFids&fidsId=20001&fidsInit=arrivals&fidsApt={}".format(
             code)
         self.link_delay = "https://flightaware.com/live/cancelled/yesterday/{}".format(code)
-        print(self.link_all)
+        # print(self.link_all)
 
     @staticmethod
     def get_html(url):

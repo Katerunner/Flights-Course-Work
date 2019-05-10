@@ -38,12 +38,10 @@ class AircraftsNet:
                 maxi = temp
                 year = int(i.year)
 
-        print(year)
         return year
 
     def delay_extender(self, delay, text):
         year = datetime.datetime.now().year
-        print(text)
         return delay + (year - self.search_year(text)) / 1000
 
 

@@ -38,12 +38,10 @@ class AircraftsNet:
                 maxi = temp
                 year = int(i.year)
 
-        print(year)
         return year
 
     def delay_extender(self, delay, text):
         year = datetime.datetime.now().year
-        print(text)
         return delay + (year - self.search_year(text)) / 1000
 
 
@@ -80,14 +78,16 @@ def get_plane(flight):
             if 'var trackpollBootstrap = ' in str(i):
                 result = str(str(i.text).replace('var trackpollBootstrap = ', '').replace(';', ''))
 
-        diktik = json.loads(result)
-        # airline_logo = diktik['flights'][list(diktik['flights'].keys())[0]]['thumbnail']['imageUrl']
         try:
+            print("OK")
+            diktik = json.loads(result)
+            airline_logo = diktik['flights'][list(diktik['flights'].keys())[0]]['thumbnail']['imageUrl']
             airplane = diktik['flights'][list(diktik['flights'].keys())[0]]['aircraft']['friendlyType']
         except:
-            airplane = None
+            airplane = "B737"
+            airline_logo = "https://resource.alaskaair.net/-/media/Images/campaigns/2019-brand-campaign/AA_2019_New-Airplane-Icon_midB-01?v=1"
 
         print(airplane)
-        return airplane
+        return airplane, airline_logo
 
     return parse(get_html(url))

@@ -29,7 +29,6 @@ class AirportsNet:
             if i.code_3 == cod:
                 return i
 
-
 class Airport:
 
     def __init__(self, name, country, city, code_3, code_4, lat, lon):
@@ -40,3 +39,9 @@ class Airport:
         self.code_4 = code_4
         self.lat = lat
         self.lon = lon
+
+    def __eq__(self, other):
+        if self.code_3 == other.code_3:
+            return True
+        else:
+            return False

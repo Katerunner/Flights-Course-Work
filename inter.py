@@ -7,6 +7,7 @@ from functools import partial
 import map
 import datetime
 import time
+import news
 from coordinates import Corray
 import webbrowser
 import os
@@ -48,9 +49,60 @@ root.geometry("{0}x{1}+0+0".format(width, height))
 main = Frame(root, bg='aliceblue', borderwidth=2, highlightbackground="deepskyblue", highlightcolor="deepskyblue",
              highlightthickness=3)
 table = Frame(main, bg='aliceblue')
-scrollbar = Scrollbar(root)
-scrollbar.pack( side = RIGHT, fill=Y )
 main.pack()
+
+
+def news_f():
+    root2 = Tk()
+    root2.title('News')
+    root2.iconbitmap('airplane.ico')
+    main2 = Frame(root2, bg="aliceblue")
+    main2.pack(fill=X)
+    title = Label(main2, text="Latest Safety Occurrences", font=('Marcellus SC', 12), bg='aliceblue', borderwidth=2,
+                  highlightbackground="deepskyblue",
+                  highlightcolor="deepskyblue",
+                  highlightthickness=1)
+    title.grid(row=0, column=0)
+    link_so = 'https://aviation-safety.net/'
+    link_nn = 'http://www.airport-world.com/'
+
+    def go_so():
+        webbrowser.open(link_so)
+
+    def go_nn():
+        webbrowser.open(link_nn)
+
+    but_so = Button(main2, bg='skyblue', text="Aviation safety news", command=go_so)
+    but_nn = Button(main2, bg='skyblue', text="Airport world news", command=go_nn)
+    but_so.grid(row=0, column=1)
+    but_nn.grid(row=0, column=2)
+    but_so.bind("<Enter>", lambda e: e.widget.config(relief=RIDGE))
+    but_so.bind("<Leave>", lambda e: e.widget.config(relief=RAISED))
+    but_nn.bind("<Enter>", lambda e: e.widget.config(relief=RIDGE))
+    but_nn.bind("<Leave>", lambda e: e.widget.config(relief=RAISED))
+    table2 = Frame(root2, bg='aliceblue', borderwidth=2, highlightbackground="deepskyblue",
+                   highlightcolor="deepskyblue",
+                   highlightthickness=3)
+    table2.pack()
+    for i in range(6):
+        Label(table2, text=news.title[i]).grid(row=1, column=i)
+    for i in range(4):
+        for j in range(6):
+            Label(table2, text=news.result[i][j]).grid(row=i + 2, column=j)
+    root2.mainloop()
+
+def git_f():
+    webbrowser.open("https://github.com/Katerunner/Flights-Course-Work")
+
+news_b = Button(root, height=2, width=6, text="News", font=('Marcellus SC', 12), bg='skyblue', command=news_f)
+news_b.place(x=3, y=500)
+news_b.bind("<Enter>", lambda e: e.widget.config(relief=RIDGE))
+news_b.bind("<Leave>", lambda e: e.widget.config(relief=RAISED))
+git_b = Button(root, height=2, width=6, text="GitHub", font=('Marcellus SC', 12), bg='skyblue', command=git_f)
+git_b.place(x=3, y=570)
+git_b.bind("<Enter>", lambda e: e.widget.config(relief=RIDGE))
+git_b.bind("<Leave>", lambda e: e.widget.config(relief=RAISED))
+
 top_menu = 0
 menubar = 0
 
@@ -78,19 +130,42 @@ def info_wait_start():
             text = "|"
         info_tab.config(text=info_tab['text'][:-1] + text)
         info_tab.after(200, loading)
+
     try:
         loading()
     except Exception as a:
         print(a)
 
+
 def info_wait_destroy():
     info_f.destroy()
 
 
-
 def donothing():
-    map.update_map(codes[0], codes[1])
-    webbrowser.open('file://' + os.path.realpath('map.html'))
+    try:
+        map.update_map(codes[0], codes[1])
+        webbrowser.open('file://' + os.path.realpath('map.html'))
+    except:
+        global info_map_tab, info_map, info_map_time
+        info_map_time = time.time()
+        info_map = Frame(root, borderwidth=2, highlightbackground="yellow", highlightcolor="yellow",
+                         highlightthickness=3)
+        info_map.place(x=100, y=100)
+        info_map_tab = Label(info_map,
+                             text="To see the map\nyou need to\nchoose the route first",
+                             bg="lemonchiffon", width=25, height=5)
+        info_map_tab.pack()
+
+        def loading_map():
+            global info_map_tab, info_map_time, info_map
+            if time.time() > info_map_time + 3.5:
+                info_map.destroy()
+            info_map_tab.after(200, loading_map)
+
+        try:
+            loading_map()
+        except Exception as a:
+            print(a)
 
 
 def overd_t():
@@ -259,19 +334,20 @@ def link_to_flight(flight):
     webbrowser.open(link)
 
 
-def pre_final_cur():
-    global date, table, pref
+def pre_final_cur(inputed_date):
+    global date, table, pref, canvas
     info_wait_start()
     root.update()
     now = datetime.datetime.now()
     try:
+        canvas.destroy()
         table.destroy()
     except:
         pass
-    canvas = Canvas(main, bg = "white", height = 12)
-    table = Frame(canvas, bg="white", height = 12)
+    canvas = Canvas(main, bg="white")
+    table = Frame(canvas, bg="white")
     canvas.grid(row=11, columnspan=2)
-    table.pack(side="left",fill="y")
+    table.pack(side="left", fill="y")
     date = str(now.day) + "." + str(now.month) + "." + str(now.year)
     pref = Label(main, text="Flights from " + str(codes[0]) + " to " + str(codes[1]) + " on " + date + ":", width=112,
                  height=2, bg="lightblue")
@@ -289,7 +365,10 @@ def pre_final_cur():
         weath = weather.Weather()
         temp = airnet.find_by_airname(airs[1])
         weathik = Corray(temp.lat, temp.lon)
-        weath.weather_coord(weathik)
+        if inputed_date:
+            weath.weather_coord_forecast(weathik, inputed_date)
+        else:
+            weath.weather_coord(weathik)
         delik = delay.Delay(temp.code_3).alter_del()
         delik += weath.danger()
 
@@ -399,6 +478,7 @@ def pre_final_cur():
         Label(table, text="Nothing found", width=112, bg='yellow').grid(row=0, column=0)
     info_wait_destroy()
 
+
 def set_depar():
     global cur_code
     codes[0] = cur_code
@@ -481,7 +561,6 @@ def upd_con():
     except Exception as a:
         print(a)
 
-
     # for i in findflight.airports[cursl]:
     #     Lb2.insert(END, findflight.name_city_loc[list(i.keys())[0]][0] + ", " + list(i.keys())[0])
     #     airport_names.append(list(i.keys())[0])
@@ -515,6 +594,7 @@ def upd_air():
     # Lb2.grid(row=1, column=1)
     # print(airport_names)
 
+
 countries = []
 for i in sorted(list(set([i.country for i in airnet.airdat]))):
     countries.append(i)
@@ -528,6 +608,7 @@ Lb1 = Listbox(main, width=55, cursor="sb_left_arrow")
 for i in countries:
     Lb1.insert(END, i)
 
+
 def lb1_update():
     global countries, con_copy
     if con_copy != countries:
@@ -537,20 +618,22 @@ def lb1_update():
         con_copy = copy.copy(countries)
     Lb1.after(200, lb1_update)
 
+
 try:
     lb1_update()
 except Exception as a:
     print(a)
 
-
 text1 = StringVar()
 text1.set("Type country to search")
 text2 = StringVar()
 text2.set("Type airport to search")
-En1 = Entry(main, width=55, textvariable=text1, fg = "gray")
+En1 = Entry(main, width=55, textvariable=text1, fg="gray")
 En1.bind("<Button-1>", lambda e: text1.set(""))
-En2 = Entry(main, width=55, textvariable=text2, fg = "gray")
+En2 = Entry(main, width=55, textvariable=text2, fg="gray")
 En2.bind("<Button-1>", lambda e: text2.set(""))
+
+
 # En1.bind("<Leave>", lambda e: text1.set("Type country to search"))
 
 
@@ -563,6 +646,7 @@ def en1_update():
     elif text1.get() != "Type country to search" and text1.get() != "":
         countries = searchik.searchik(countries, text1.get())
     En1.after(200, en1_update)
+
 
 try:
     en1_update()
@@ -585,8 +669,8 @@ title.grid(row=0, columnspan=2)
 Lb1.grid(row=2, column=0)
 B1.grid(row=3, column=0)
 temp_l.grid(row=2, column=1)
-En1.grid(row = 1, column = 0)
-En2.grid(row = 1, column = 1)
+En1.grid(row=1, column=0)
+En2.grid(row=1, column=1)
 B2.grid(row=3, column=1)
 L1.grid(row=4, columnspan=2)
 L4 = Label(main, text="(!) Departure and arrival airports can not be the same (!)")
@@ -594,7 +678,7 @@ L5 = Label(main, text="Enter date in format: 01.01.2020, or choose today's", wid
 
 
 def date_ch():
-    global L4, L5, B5, B6
+    global L4, L5, B5, B6, E1
     L4.destroy()
     L5.destroy()
     if codes[0] != 0 and codes[1] != 0 and codes[0] == codes[1]:
@@ -608,12 +692,15 @@ def date_ch():
     elif codes[0] != 0 and codes[1] != 0:
         L4 = Label(main, text="Enter or choose approximate date", width=112, bg='aliceblue')
         L4.grid(row=7, columnspan=2)
-        L5 = Label(main, text="Enter date in format: 11.1.2020, or choose today's", width=55, bg='aliceblue')
+        L5 = Label(main, text="Enter date in format: 2019-14-05, or choose today's", width=55, bg='aliceblue')
         L5.grid(row=8, column=0)
-        E1 = Entry(main, width=55, justify=CENTER)
+        textik = StringVar()
+        E1 = Entry(main, width=55, justify=CENTER, textvariable=textik)
         E1.grid(row=8, column=1)
-        B5 = Button(main, text="Current data", cursor="hand2", width=55, bg='skyblue', command=pre_final_cur)
-        B6 = Button(main, text="Choose data", cursor="hand2", width=55, bg='skyblue')
+        B5 = Button(main, text="Current date", cursor="hand2", width=55, bg='skyblue',
+                    command=lambda: pre_final_cur(None))
+        B6 = Button(main, text="Choose date", cursor="hand2", width=55, bg='skyblue',
+                    command=lambda: pre_final_cur(E1.get()))
         B5.grid(row=9, column=0)
         B6.grid(row=9, column=1)
         but_list2 = [B5, B6]
@@ -622,6 +709,7 @@ def date_ch():
             i.bind("<Leave>", lambda e: e.widget.config(relief=RAISED))
 
         print(airs)
+
 
 def but_manage():
     global but_list

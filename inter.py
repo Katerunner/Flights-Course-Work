@@ -52,12 +52,22 @@ main.pack()
 def git_f():
     webbrowser.open("https://github.com/Katerunner/Flights-Course-Work")
 
-news_b = Button(root, height=2, width=12, text="Airport News", font=('Marcellus SC', 12), bg='skyblue', command=news.news_f)
-news_b.place(x=3, y=500)
+def weath_f():
+    webbrowser.open("https://weather.com")
+
+weath_b = Button(root, height=2, width=12, text="Weather", font=('Marcellus SC', 12), bg='skyblue',
+                command=weath_f)
+weath_b.place(x=3, y=600)
+weath_b.bind("<Enter>", lambda e: e.widget.config(relief=RIDGE))
+weath_b.bind("<Leave>", lambda e: e.widget.config(relief=RAISED))
+
+news_b = Button(root, height=2, width=12, text="Airport News", font=('Marcellus SC', 12), bg='skyblue',
+                command=news.news_f)
+news_b.place(x=3, y=670)
 news_b.bind("<Enter>", lambda e: e.widget.config(relief=RIDGE))
 news_b.bind("<Leave>", lambda e: e.widget.config(relief=RAISED))
 git_b = Button(root, height=2, width=12, text="GitHub Repo.", font=('Marcellus SC', 12), bg='skyblue', command=git_f)
-git_b.place(x=3, y=570)
+git_b.place(x=3, y=740)
 git_b.bind("<Enter>", lambda e: e.widget.config(relief=RIDGE))
 git_b.bind("<Leave>", lambda e: e.widget.config(relief=RAISED))
 
@@ -301,11 +311,12 @@ def pre_final_cur(inputed_date):
         if not indate:
             today = datetime.datetime.today()
             tomorrow = today + datetime.timedelta(1)
-            indate = datetime.datetime.strftime(tomorrow,'%Y-%m-%d')
+            indate = datetime.datetime.strftime(tomorrow, '%Y-%m-%d')
         webbrowser.open("https://www.google.com/flights?flt={}.{}.{}".format(c1, c2, indate))
 
-    gf_b = Button(root, height=2, width=12, text="Google Flights", font=('Marcellus SC', 12), bg='skyblue', command=lambda:gf_f(codes[0], codes[1], inputed_date))
-    gf_b.place(x=3, y=640)
+    gf_b = Button(root, height=2, width=12, text="Google Flights", font=('Marcellus SC', 12), bg='skyblue',
+                  command=lambda: gf_f(codes[0], codes[1], inputed_date))
+    gf_b.place(x=3, y=810)
     gf_b.bind("<Enter>", lambda e: e.widget.config(relief=RIDGE))
     gf_b.bind("<Leave>", lambda e: e.widget.config(relief=RAISED))
 
@@ -374,8 +385,6 @@ def pre_final_cur(inputed_date):
                 # print(deli)
             except Exception as a:
                 raise a
-                print(a)
-                deli = delik
 
             if deli == 0:
                 color = "white"
@@ -411,7 +420,7 @@ def pre_final_cur(inputed_date):
             Label(table, text=airnet.find_by_airname(airs[1]).city + " " + te_1[i][3], width=17, bg="aliceblue",
                   relief=GROOVE, borderwidth=2,
                   highlightbackground="deepskyblue", highlightcolor="deepskyblue", ).grid(row=i, column=5)
-            Label(table, text=round(float(deli), 3)*5, width=6, bg=color,
+            Label(table, text=round(float(deli * 5), 3), width=6, bg=color,
                   relief=GROOVE, borderwidth=2,
                   highlightbackground="deepskyblue", highlightcolor="deepskyblue", ).grid(row=i, column=6)
             # try:

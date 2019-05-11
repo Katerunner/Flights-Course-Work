@@ -34,6 +34,7 @@ class Weather:
         obj = json.loads(x.read())
         self.w_dat = obj
         # print(obj['weather'][0]['id'])
+        self.description = obj['weather'][0]['description']
         return obj['weather'][0]['description']
 
     def weather_coord_forecast(self, coord, indate):

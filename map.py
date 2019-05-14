@@ -12,6 +12,7 @@ import math
 
 
 def distance_on_unit_sphere(coord1, coord2):
+    """Returns length between 2 coordinates"""
     lat1 = coord1['lat']
     long1 = coord1['lon']
     lat2 = coord2['lat']
@@ -46,7 +47,7 @@ def distance_on_unit_sphere(coord1, coord2):
 
 
 def update_map(c_dep, c_arr):
-
+    """Updates the map"""
     dep = airports.AirportsNet().find_by_code(c_dep)
     dep_c = Corray(dep.lat, dep.lon)
     dep_w = weather.Weather()

@@ -1,6 +1,6 @@
 import urllib.request
 from bs4 import BeautifulSoup
-import threading
+
 
 # http://tracker.flightview.com/customersetup/FlightViewWebFids/cachedFids/?vmode=departures&Apt=FRA&mainPage=tracker.flightview.com
 # link_all = "https://tracker.flightview.com/FVAccess2/tools/fids/fidsDefault.asp?accCustId=FVWebFids&fidsId=20001&fidsInit=departures&fidsApt=FRA&fidsFilterAl=&fidsFilterArrap="
@@ -11,7 +11,10 @@ import threading
 
 
 class Delay:
+    """Represents delay object"""
+
     def __init__(self, code):
+        """Initialization"""
         self.code = code
         self.link_all = "https://tracker.flightview.com/FVAccess2/tools/fids/fidsDefault.asp?accCustId=FVWebFids&fidsId=20001&fidsInit=arrivals&fidsApt={}".format(
             code)
@@ -20,11 +23,13 @@ class Delay:
 
     @staticmethod
     def get_html(url):
+        """Returns html by url"""
         response = urllib.request.urlopen(url)
         return response.read()
 
     @staticmethod
     def parse(html):
+        """Returns parsed data"""
         soup = BeautifulSoup(html, features="html.parser")
         table = soup.find('div', style="float: left; display: inline-block; max-width: 74%")
         cont = table.find_all('h3')
@@ -32,6 +37,7 @@ class Delay:
         return [int(i.split("  ")[1]) for i in preres]
 
     def alter_del(self):
+        """Calculates and returns delay"""
         result = []
         html = self.get_html(self.link_all)
         soup = BeautifulSoup(html, features="html.parser")
@@ -55,11 +61,13 @@ class Delay:
 
     @staticmethod
     def parse_a(html):
+        """Parses html for hard way calculations"""
         soup = BeautifulSoup(html, features="html.parser")
         table = soup.find_all('td', id="ffAlLbl")
         return len(table)
 
     def get_delay(self):
+        """Gets delay hard way"""
         res1 = self.parse_a(self.get_html(self.link_all))
         print("All:", res1)
         res2 = self.parse(self.get_html(self.link_delay))

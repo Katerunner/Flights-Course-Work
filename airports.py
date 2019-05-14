@@ -1,4 +1,5 @@
 class AirportsNet:
+    """Represents the net of the airports"""
 
     def __init__(self, name='default_net', filename='airports.dat'):
         self.name = name
@@ -20,18 +21,23 @@ class AirportsNet:
                     pass
 
     def find_by_airname(self, aname):
+        """Returns airport by name"""
         for i in self.airdat:
             if i.name == aname:
                 return i
 
     def find_by_code(self, cod):
+        """Returns airport by code"""
         for i in self.airdat:
             if i.code_3 == cod:
                 return i
 
+
 class Airport:
+    """Represents airport"""
 
     def __init__(self, name, country, city, code_3, code_4, lat, lon):
+        """Initialization"""
         self.name = name
         self.country = country
         self.city = city
@@ -41,6 +47,7 @@ class Airport:
         self.lon = lon
 
     def __eq__(self, other):
+        """Checks if airports are equal"""
         if self.code_3 == other.code_3:
             return True
         else:

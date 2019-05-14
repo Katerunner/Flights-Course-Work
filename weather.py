@@ -8,7 +8,9 @@ if api == "":
 
 
 class Weather:
+    """Represents weather object"""
     def __init__(self):
+        """Initialization"""
         self.w_dat = None
         self.dat = {}
         self.description = 'light snow'
@@ -21,13 +23,16 @@ class Weather:
 
     @property
     def image(self):
+        """Gets image from url"""
         if self.w_dat:
             return 'http://openweathermap.org/img/w/{}.png'.format(self.w_dat['weather'][0]['icon'])
 
     def danger(self):
+        """Calculates and returns danger coef for the weather"""
         return float(self.dat[self.description.lower()][-1])/50
 
     def weather_coord(self, coord):
+        """Returns weather by coordinates"""
         urll = "https://api.openweathermap.org/data/2.5/weather?lat="
         urll += str(coord['lat']) + "&lon=" + str(coord['lon']) + "&appid=" + api
         x = urllib.request.urlopen(urll)
@@ -38,6 +43,7 @@ class Weather:
         return obj['weather'][0]['description']
 
     def weather_coord_forecast(self, coord, indate):
+        """Returns weather forecast by coordinates"""
         urll = "https://api.openweathermap.org/data/2.5/forecast?lat="
         urll += str(coord['lat']) + "&lon=" + str(coord['lon']) + "&appid=" + api
         x = urllib.request.urlopen(urll)

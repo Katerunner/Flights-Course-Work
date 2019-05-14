@@ -1,22 +1,42 @@
-import airports
-import aircrafts
-import delay
-import weather
 from tkinter import *
-from functools import partial
-import map
-import datetime
-import time
-import news
-from coordinates import Corray
-import webbrowser
-import os
-import urllib.request
 from PIL import Image, ImageTk
-import io
-import parsik
-import copy
-import searchik
+
+load_root = Tk()
+load_root.title('Flight Status')
+load_root.iconbitmap('airplane.ico')
+load_root.geometry("900x500")
+load_root.state('zoomed')
+load_image = PhotoImage(file="load.gif")
+load_label = Label(load_root, image=load_image)
+load_label.place(x=0, y=0, relwidth=1, relheight=1)
+width = load_root.winfo_screenwidth()
+height = load_root.winfo_screenheight()
+load_root.geometry("{0}x{1}+0+0".format(width, height))
+# load_root.overrideredirect(True)
+load_root.update()
+
+try:
+    import airports
+    import aircrafts
+    import delay
+    import weather
+    from functools import partial
+    import map
+    import datetime
+    import time
+    import news
+    from coordinates import Corray
+    import webbrowser
+    import os
+    import urllib.request
+    import io
+    import parsik
+    import copy
+    import searchik
+
+except Exception as b:
+    print("Please check all files or install missing")
+    raise b
 
 # TODO: No internet connection
 
@@ -28,6 +48,7 @@ cur_code = ''
 air = ''
 date = ''
 
+load_root.destroy()
 root = Tk()
 # root.tk.call('encoding', 'system', 'utf-8')
 airnet = airports.AirportsNet()
@@ -52,12 +73,24 @@ main.pack()
 def git_f():
     webbrowser.open("https://github.com/Katerunner/Flights-Course-Work")
 
-news_b = Button(root, height=2, width=12, text="Airport News", font=('Marcellus SC', 12), bg='skyblue', command=news.news_f)
-news_b.place(x=3, y=500)
+
+def weath_f():
+    webbrowser.open("https://weather.com")
+
+
+weath_b = Button(root, height=2, width=12, text="Weather", font=('Marcellus SC', 12), bg='skyblue',
+                 command=weath_f)
+weath_b.place(x=3, y=600)
+weath_b.bind("<Enter>", lambda e: e.widget.config(relief=RIDGE))
+weath_b.bind("<Leave>", lambda e: e.widget.config(relief=RAISED))
+
+news_b = Button(root, height=2, width=12, text="Airport News", font=('Marcellus SC', 12), bg='skyblue',
+                command=news.news_f)
+news_b.place(x=3, y=670)
 news_b.bind("<Enter>", lambda e: e.widget.config(relief=RIDGE))
 news_b.bind("<Leave>", lambda e: e.widget.config(relief=RAISED))
 git_b = Button(root, height=2, width=12, text="GitHub Repo.", font=('Marcellus SC', 12), bg='skyblue', command=git_f)
-git_b.place(x=3, y=570)
+git_b.place(x=3, y=740)
 git_b.bind("<Enter>", lambda e: e.widget.config(relief=RIDGE))
 git_b.bind("<Leave>", lambda e: e.widget.config(relief=RAISED))
 
@@ -301,11 +334,12 @@ def pre_final_cur(inputed_date):
         if not indate:
             today = datetime.datetime.today()
             tomorrow = today + datetime.timedelta(1)
-            indate = datetime.datetime.strftime(tomorrow,'%Y-%m-%d')
+            indate = datetime.datetime.strftime(tomorrow, '%Y-%m-%d')
         webbrowser.open("https://www.google.com/flights?flt={}.{}.{}".format(c1, c2, indate))
 
-    gf_b = Button(root, height=2, width=12, text="Google Flights", font=('Marcellus SC', 12), bg='skyblue', command=lambda:gf_f(codes[0], codes[1], inputed_date))
-    gf_b.place(x=3, y=640)
+    gf_b = Button(root, height=2, width=12, text="Google Flights", font=('Marcellus SC', 12), bg='skyblue',
+                  command=lambda: gf_f(codes[0], codes[1], inputed_date))
+    gf_b.place(x=3, y=810)
     gf_b.bind("<Enter>", lambda e: e.widget.config(relief=RIDGE))
     gf_b.bind("<Leave>", lambda e: e.widget.config(relief=RAISED))
 
@@ -374,8 +408,6 @@ def pre_final_cur(inputed_date):
                 # print(deli)
             except Exception as a:
                 raise a
-                print(a)
-                deli = delik
 
             if deli == 0:
                 color = "white"
@@ -411,7 +443,7 @@ def pre_final_cur(inputed_date):
             Label(table, text=airnet.find_by_airname(airs[1]).city + " " + te_1[i][3], width=17, bg="aliceblue",
                   relief=GROOVE, borderwidth=2,
                   highlightbackground="deepskyblue", highlightcolor="deepskyblue", ).grid(row=i, column=5)
-            Label(table, text=round(float(deli), 3)*5, width=6, bg=color,
+            Label(table, text=round(float(deli * 5), 3), width=6, bg=color,
                   relief=GROOVE, borderwidth=2,
                   highlightbackground="deepskyblue", highlightcolor="deepskyblue", ).grid(row=i, column=6)
             # try:
@@ -660,7 +692,8 @@ def date_ch():
         L4 = Label(main, text="(!) Departure and arrival airports can not be the same (!)", width=112, bg='lightcoral')
         L4.grid(row=7, columnspan=2)
     elif codes[0] != 0 and codes[1] != 0:
-        L4 = Label(main, text="Enter or choose approximate date", width=112, bg='aliceblue')
+        L4 = Label(main, text="Enter or choose approximate date (10 days forward maximum available)", width=112,
+                   bg='aliceblue')
         L4.grid(row=7, columnspan=2)
         L5 = Label(main, text="Enter date in format: 2019-14-05, or choose today's", width=55, bg='aliceblue')
         L5.grid(row=8, column=0)

@@ -3,11 +3,9 @@ from bs4 import BeautifulSoup
 from tkinter import *
 import webbrowser
 
-
 url = "https://aviation-safety.net/"
 
-
-headers = {'User-Agent':'Mozilla/5.0'}
+headers = {'User-Agent': 'Mozilla/5.0'}
 page = requests.get(url)
 soup = BeautifulSoup(page.text, "html.parser")
 titles = ["Date", "Airplane", "Fligth", "Airline", "Fatalities", "Airport"]
@@ -27,9 +25,12 @@ for i in rows:
     for j in i.find_all('td'):
         temp.append(str(j.text).strip())
     result.append(temp)
+
+
 # print(result)
 
 def to_string(arr):
+    """Transforms data to string"""
     res = ""
     for i in arr:
         for j in i[:-2]:
@@ -37,13 +38,16 @@ def to_string(arr):
         res += "\n"
     return res
 
+
 def news_f():
+    """Shows news with interface"""
     root2 = Tk()
     root2.title('News')
     root2.iconbitmap('airplane.ico')
     main2 = Frame(root2, bg="aliceblue")
     main2.pack(fill=X)
-    title = Label(main2, width = 50, text="Latest Safety Occurrences", font=('Marcellus SC', 12), bg='aliceblue', borderwidth=2,
+    title = Label(main2, width=50, text="Latest Safety Occurrences", font=('Marcellus SC', 12), bg='aliceblue',
+                  borderwidth=2,
                   highlightbackground="deepskyblue",
                   highlightcolor="deepskyblue",
                   highlightthickness=1)
@@ -52,9 +56,11 @@ def news_f():
     link_nn = 'http://www.airport-world.com/'
 
     def go_so():
+        """Opens browser first link"""
         webbrowser.open(link_so)
 
     def go_nn():
+        """Opens browser first link"""
         webbrowser.open(link_nn)
 
     but_so = Button(main2, bg='skyblue', text="Aviation safety news", command=go_so)

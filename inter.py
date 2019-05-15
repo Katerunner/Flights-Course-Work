@@ -1,5 +1,17 @@
 from tkinter import *
 from PIL import Image, ImageTk
+from urllib.request import urlopen
+
+
+# ============== Loading screen ==============
+
+def internet_on():
+    try:
+        urlopen('https://www.google.com/', timeout=10)
+        return True
+    except:
+        return False
+
 
 load_root = Tk()
 load_root.title('Flight Status')
@@ -14,6 +26,22 @@ height = load_root.winfo_screenheight()
 load_root.geometry("{0}x{1}+0+0".format(width, height))
 # load_root.overrideredirect(True)
 load_root.update()
+if not internet_on():
+    load_label.destroy()
+    del load_label
+    load_image = PhotoImage(file="no_inter.gif")
+    load_label = Label(load_root, image=load_image)
+    load_label.place(x=0, y=0, relwidth=1, relheight=1)
+    load_root.update()
+    message_l = Label(load_root, font=('Marcellus SC', 12), bg = 'yellow', text = "No internet connection. Try again when the internet is available")
+    exit_but = Button(load_root, font=('Marcellus SC', 12), bg = 'red', text = "Exit", command = quit)
+    exit_but.bind("<Enter>", lambda e: e.widget.config(relief=RIDGE))
+    exit_but.bind("<Leave>", lambda e: e.widget.config(relief=RAISED))
+    message_l.place(x=width/2.8, y=height/2 + 200)
+    exit_but.place(x=width/2, y=height/2 + 250)
+    load_root.mainloop()
+
+# ============== Imports ==============
 
 try:
     import airports
@@ -40,6 +68,8 @@ except Exception as b:
 
 # TODO: No internet connection
 
+# ============== Starting window creation ==============
+
 codes = [0, 0]
 airport_names = []
 airs = ['Nothing', 'Nothing']
@@ -48,7 +78,10 @@ cur_code = ''
 air = ''
 date = ''
 
-load_root.destroy()
+try:
+    load_root.destroy()
+except TclError:
+    quit()
 root = Tk()
 # root.tk.call('encoding', 'system', 'utf-8')
 airnet = airports.AirportsNet()
@@ -71,10 +104,12 @@ main.pack()
 
 
 def git_f():
+    """Opens github link in browser"""
     webbrowser.open("https://github.com/Katerunner/Flights-Course-Work")
 
 
 def weath_f():
+    """Opens weather link in the browser"""
     webbrowser.open("https://weather.com")
 
 
@@ -99,6 +134,7 @@ menubar = 0
 
 
 def info_wait_start():
+    """Displays info screen while loading flights"""
     global info_tab, info_f
     info_f = Frame(root, borderwidth=2, highlightbackground="yellow", highlightcolor="yellow",
                    highlightthickness=3)
@@ -110,6 +146,7 @@ def info_wait_start():
     info_tab.pack()
 
     def loading():
+        """Changes the loading symbol"""
         global info_tab
         if info_tab['text'][-1] == "|":
             text = "\\"
@@ -129,10 +166,12 @@ def info_wait_start():
 
 
 def info_wait_destroy():
+    """Destroys info screen"""
     info_f.destroy()
 
 
 def donothing():
+    """Updates map and opens the html map in browser"""
     try:
         map.update_map(codes[0], codes[1])
         webbrowser.open('file://' + os.path.realpath('map.html'))
@@ -160,14 +199,17 @@ def donothing():
 
 
 def overd_t():
+    """Makes program fullscreen"""
     root.overrideredirect(True)
 
 
 def overd_f():
+    """Makes program windowed"""
     root.overrideredirect(False)
 
 
 def but_menu():
+    """Displays big button top menu"""
     global main, top_menu, menubar, time_date, time1, datik, but_list
 
     try:
@@ -219,18 +261,18 @@ def but_menu():
 
     time1 = ''
     datik = ''
-    # clock = Label(root, font=('times', 20, 'bold'), bg='green')
-    # clock.pack(fill=BOTH, expand=1)
-    Label(top_menu, width=8, bg='aliceblue', text="Today:", font=('Marcellus SC', 12)).grid(column=4, row=0)
-    Label(top_menu, width=8, bg='aliceblue', text="Time:", font=('Marcellus SC', 12)).grid(column=6, row=0)
+
+    Label(top_menu, width=7, bg='aliceblue', text="Today:", font=('Marcellus SC', 12)).grid(column=4, row=0)
+    Label(top_menu, width=7, bg='aliceblue', text="Time:", font=('Marcellus SC', 12)).grid(column=6, row=0)
 
     date_w = Label(top_menu, bg='aliceblue', font=('Marcellus SC', 12), width=9)
     date_w.grid(column=5, row=0)
 
-    time_w = Label(top_menu, bg='aliceblue', font=('Marcellus SC', 12), width=6)
+    time_w = Label(top_menu, bg='aliceblue', font=('Marcellus SC', 12), width=8)
     time_w.grid(column=7, row=0)
 
     def tick():
+        """Updates time each second"""
         global time1
         time2 = time.strftime('%H:%M:%S')
         if time2 != time1:
@@ -239,6 +281,7 @@ def but_menu():
         time_w.after(200, tick)
 
     def bam():
+        """Updates date"""
         global datik
         date2 = datetime.date.today()
         if date2 != datik:
@@ -269,6 +312,7 @@ def but_menu():
 
 
 def menu():
+    """Displays dtandart program menu"""
     global top_menu, menubar
 
     try:
@@ -310,27 +354,21 @@ def menu():
 
 menu()
 but_menu()
-# codes = [0, 0]
-# airport_names = []
-# airs = ['Nothing', 'Nothing']
-# country = ''
-# cur_code = ''
-# air = ''
-# date = ''
 print(air)
 
 
 def link_to_flight(flight):
+    """Opens webpage with more information for certain flight"""
     link = 'https://flightaware.com/live/flight/{}'.format(aircrafts.format_flight(flight))
     webbrowser.open(link)
 
 
 def pre_final_cur(inputed_date):
+    """Main function that displays all flights for given route and the delay rates for each of them"""
     global date, table, pref, canvas
-    print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1111")
-    print(codes[0], codes[1], inputed_date)
 
     def gf_f(c1, c2, indate):
+        """Activates and opens Google Flights page for certain route"""
         if not indate:
             today = datetime.datetime.today()
             tomorrow = today + datetime.timedelta(1)
@@ -368,7 +406,6 @@ def pre_final_cur(inputed_date):
         print(airnet.find_by_airname(airs[1]).lat)
         print(airnet.find_by_airname(airs[1]).lon)
 
-        # deli = delay.Delay(airnet.find_by_airname(airs[1]).code_3).alter_del()
         weath = weather.Weather()
         temp = airnet.find_by_airname(airs[1])
         weathik = Corray(temp.lat, temp.lon)
@@ -376,13 +413,6 @@ def pre_final_cur(inputed_date):
         delik = delay.Delay(temp.code_3).alter_del()
         delik += weath.danger()
 
-        # url = "https://e1.flightcdn.com/images/airline_logos/90p/CLH.png"
-        # raw_data = urllib.request.urlopen(url).read()
-        # im = Image.open(io.BytesIO(raw_data))
-        # image = ImageTk.PhotoImage(im)
-        #
-        # for i in range(5):
-        #     Label(table, image=image).grid(column=0, row=i)
         for_info = []
         for_info.clear()
         for i in range(len(te_1)):
@@ -395,17 +425,9 @@ def pre_final_cur(inputed_date):
             print("\n______________TE1_____________")
             print(te_1)
             try:
-                # print(delik)
                 agp = aircrafts.get_plane(te_1[i][0])
                 print(agp)
-                # raw_data = urllib.request.urlopen(agp[1]).read()
-                # im = Image.open(io.BytesIO(raw_data))
-                # im = im.resize((25, 25), Image.ANTIALIAS)
-                # image = ImageTk.PhotoImage(im)
                 deli = aicnet.delay_extender(delik, agp[0])
-                # print(te_1[i][0])
-                # print(agp)
-                # print(deli)
             except Exception as a:
                 raise a
 
@@ -413,9 +435,13 @@ def pre_final_cur(inputed_date):
                 color = "white"
             elif deli < 0.05:
                 color = "green"
-            elif 0.04 < deli < 0.1:
+            elif 0.04 < deli < 0.07:
+                color = "#B2C248"
+            elif 0.06 < deli < 0.12:
                 color = "yellow"
-            elif deli > 0.09:
+            elif 0.11 < deli < 0.16:
+                color = "#E56717"
+            elif deli > 0.15:
                 color = "red"
             else:
                 color = "white"
@@ -446,19 +472,6 @@ def pre_final_cur(inputed_date):
             Label(table, text=round(float(deli * 5), 3), width=6, bg=color,
                   relief=GROOVE, borderwidth=2,
                   highlightbackground="deepskyblue", highlightcolor="deepskyblue", ).grid(row=i, column=6)
-            # try:
-            # a = Label(table)
-            # a.image = image
-            # a.configure(image = image, width=14)
-            # a.grid(row=i, column=0)
-            # except:
-
-            # im_exit = Image.open("exit_b.jpg")
-            # image_exit = ImageTk.PhotoImage(im_exit)
-            # exit_b = Button(top_menu, bg='red', image=image_exit, width=43, height=33, text="Exit", cursor="hand2",
-            #                 command=root.quit)
-            # exit_b.image = image_exit
-            # exit_b.grid(column=9, row=0)
 
             action_with_arg = partial(link_to_flight, for_info[i])
             im_info = Image.open("info_b.jpg")
@@ -470,11 +483,7 @@ def pre_final_cur(inputed_date):
             info_b.grid(row=i, column=0)
             info_b.bind("<Enter>", lambda e: e.widget.config(relief=RIDGE))
             info_b.bind("<Leave>", lambda e: e.widget.config(relief=GROOVE))
-            # myscrollbar.grid(rowspan=i+2)
-            # a.bind("<Button-1>", action_with_arg)
             root.update()
-            # st = Label(table, text = parsik.flight(codes[0],codes[1]), width = 112, bg = "aliceblue")
-            # st.pack()
     else:
         print("i'm here")
         Label(table, text="Nothing found", width=112, bg='yellow').grid(row=0, column=0)
@@ -482,6 +491,7 @@ def pre_final_cur(inputed_date):
 
 
 def set_depar():
+    """Sets departure airport"""
     global cur_code
     codes[0] = cur_code
     airs[0] = air
@@ -492,6 +502,7 @@ def set_depar():
 
 
 def set_arriv():
+    """Sets arrival airport"""
     global cur_code
     codes[1] = cur_code
     airs[1] = air
@@ -502,6 +513,7 @@ def set_arriv():
 
 
 def upd_con():
+    """Dispalys airports for chosen country"""
     global B2, Lb2, airport_names, country, cities, cit_copy, En2, text2
     try:
         L1.grid(row=4)
@@ -533,6 +545,7 @@ def upd_con():
     cit_copy = copy.copy(cities)
 
     def lb2_update():
+        """Updates cities and airports"""
         global cities, cit_copy
         if cit_copy != cities:
             # print("Copy:", cit_copy)
@@ -546,9 +559,10 @@ def upd_con():
     try:
         lb2_update()
     except Exception as a:
-        print(a)
+        print("Error or Exception:", a)
 
     def en2_update():
+        """Updates search entry"""
         global cities, cit_copy
         if text2.get() == "" or text2.get() == "Type airport to search":
             cities = []
@@ -563,10 +577,6 @@ def upd_con():
     except Exception as a:
         print(a)
 
-    # for i in findflight.airports[cursl]:
-    #     Lb2.insert(END, findflight.name_city_loc[list(i.keys())[0]][0] + ", " + list(i.keys())[0])
-    #     airport_names.append(list(i.keys())[0])
-
     Lb2.grid(row=2, column=1)
     B2.grid(row=3, column=1)
     B2.bind("<Enter>", lambda e: e.widget.config(relief=RIDGE))
@@ -574,27 +584,18 @@ def upd_con():
 
 
 def upd_air():
+    """Selects airport for future actions"""
     global air, L1, cur_code, Lb3, Lb4, cities
-    # cursl = airport_names[Lb2.curselection()[0]]
     for i in airnet.airdat:
         if i.name == cities[::-1][Lb2.curselection()[0]]:
             cur_code = i.code_3
-    # # print(Lb2.curselection())
     air = cities[::-1][Lb2.curselection()[0]]
-    # cur_code = findflight.find_code(cursl, country)
     L1.destroy()
     L1 = Label(main, text="Selected airport:  '" + air + "'", cursor="hand2", width=112, bg='aliceblue')
     L1.grid(row=4, columnspan=2)
     B3.grid(row=5, column=0)
     B4.grid(row=5, column=1)
     print(country)
-    # Lb2 = Listbox(root, width = 35)
-    # airport_names = []
-    # for i in findflight.airports[cursl]:
-    #     Lb2.insert(END, list(i.keys())[0])
-    #     airport_names.append(list(i.keys())[0])
-    # Lb2.grid(row=1, column=1)
-    # print(airport_names)
 
 
 countries = []
@@ -612,6 +613,7 @@ for i in countries:
 
 
 def lb1_update():
+    """Updates counties list"""
     global countries, con_copy
     if con_copy != countries:
         Lb1.delete(0, END)
@@ -636,10 +638,8 @@ En2 = Entry(main, width=55, textvariable=text2, fg="gray")
 En2.bind("<Button-1>", lambda e: text2.set(""))
 
 
-# En1.bind("<Leave>", lambda e: text1.set("Type country to search"))
-
-
 def en1_update():
+    """Updates countries search entry"""
     global countries, con_copy
     if text1.get() == "" or text1.get() == "Type country to search":
         countries = []
@@ -657,15 +657,12 @@ except Exception as a:
 
 temp_l = Label(main, text='Choose country and you will be able to select airport', width=55, height=10,
                bg='deepskyblue')
-# Lb2 = Listbox(root, width = 35)
+
 B1 = Button(main, text='Choose country', cursor="hand2", width=55, command=upd_con, bg='skyblue')
 B2 = Button(main, width=55, bg='skyblue')
 L1 = Label(main, text="Selected Airport", width=112, bg='aliceblue')
 B3 = Button(main, text="Departure", cursor="hand2", width=55, command=set_depar, bg='skyblue')
 B4 = Button(main, text="Arrival", cursor="hand2", width=55, command=set_arriv, bg='skyblue')
-
-# L2 = Label(root, text = depart_ar, width = 55)
-# L2 = Label(root, text = arriv_ar, width = 55)
 
 title.grid(row=0, columnspan=2)
 Lb1.grid(row=2, column=0)
@@ -680,6 +677,7 @@ L5 = Label(main, text="Enter date in format: 01.01.2020, or choose today's", wid
 
 
 def date_ch():
+    """Checks if the route is correct and displays entries and buttons for choosing date"""
     global L4, L5, B5, B6, E1
     L4.destroy()
     L5.destroy()
@@ -715,6 +713,7 @@ def date_ch():
 
 
 def but_manage():
+    """Manages the buttons to a nice looking animations"""
     global but_list
     but_list += [B1, B2, B3, B4]
     but_list = list(set(but_list))

@@ -3,7 +3,7 @@ from PIL import Image, ImageTk
 from urllib.request import urlopen
 
 
-# ============== Loading screen ==============
+# ============== Loading screen ===============
 
 def internet_on():
     try:

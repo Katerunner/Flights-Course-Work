@@ -103,19 +103,11 @@ def update_map(c_dep, c_arr):
     #             lon = float(i.strip().split(",")[7])
     #             pop = (str(i.strip().split(",")[2]) + ", " + str(i.strip().split(",")[3]) + ", " + str(
     #                 i.strip().split(",")[5])).replace('"', "").replace('"', "")
-    #             pop_we = str(i.strip().split(",")[2]) + ", " + weather.weather_coord(lat, lon)
     #             # pop = pop.encode(encoding='UTF-8',errors='xmlcharrefreplace')
     #             print(i.strip().split(",")[0])
-    #             ap_group.add_child(folium.Circle(radius=110, location=[lat, lon], popup=pop, fill=False, color='red'))
-    #             we_group.add_child(
-    #                 folium.Circle(radius=150, location=[lat, lon], popup=pop_we, fill=False, color='blue'))
-    #             if int(i.strip().split(",")[0]) % 20 == 0:
-    #                 map.save("map.html")
-    #                 print('suc')
+    #             we_group.add_child(folium.Circle(radius=110, location=[lat, lon], popup=pop, fill=False, color='red'))
     #         except:
     #             print('err')
-    #     folium.PolyLine(locations=[[-5.826789855957031, 144.29600524902344], [64.04309844970703, -139.1280059814453]],
-    #                     color='gray', weight=1, opacity=0.3).add_to(map)
     map.save("map.html")
 
 # update_map("FRA", "IEV")

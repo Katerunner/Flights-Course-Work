@@ -1,0 +1,7 @@
+findflight module
+=================
+
+.. automodule:: findflight
+    :members:
+    :undoc-members:
+    :show-inheritance:

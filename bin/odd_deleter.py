@@ -1,4 +1,4 @@
-with open("bin/airlines_translator.csv", 'w') as o:
+with open("airlines_translator.csv", 'w') as o:
     with open("bin/airlines.csv", 'r') as f:
         for i in f:
             line = i.strip().split(";")[:2]

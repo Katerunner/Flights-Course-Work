@@ -1,0 +1,149 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>README &#8212; Flight Status 1.0.0 documentation</title>
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="searchik module" href="searchik.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="searchik.html" title="searchik module"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Flight Status 1.0.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="readme">
+<h1>README<a class="headerlink" href="#readme" title="Permalink to this headline">¶</a></h1>
+<p>Курсова робота</p>
+<p>Визначення даних, статусу польоту (рейсу) та вірогідності відміни або затримки через погодні умови або вік повітряного судна</p>
+<p>====== Призначення та коротка характеристика програми ======</p>
+<p>Програма призначена для визначення статусу рейсу та вірогідності відміни або затримки через погодні умови або вік повітряного судна.
+Виконується у формі ПК програми на платформі Windows 10.</p>
+<p>Реалізовані можливості:
+* вірогідність затримки або відміни рейсу по заданому маршруту
+* пошук по країнах і аеропортах
+* заданий маршрут на карті з інформацією про аеропорт, погоду і відстань
+* посилання на додаткову інформацію про кожен доступний рейс
+* посилання на інциденти та новини у аеропортах світу
+* посилання на прогноз погоди
+* посилання на Google Flights з даними про вибраний маршрут, включаючи ціну рейсу</p>
+<p>====== Вхідні та вихідні дані програми ======</p>
+<p>Вхідні дані програми - країна, аеропорт відправлення; країна, аеропорт прибуття; дата.</p>
+<p>Вихідні дані програми - номери рейсу, авіалінії, іконка авіаліній, аеропорт відправлення і прибуття, дата і вірогідність затримки або відміни</p>
+<p>====== Структура програми з коротким описом модулів, функцій, класів та методів ======</p>
+<p>Модулі:</p>
+<ul class="simple">
+<li><p>inter.py - основний модуль в якому всі елементи зібрані в одну програму і підключені до інтерфейсу на базі Tkinter. У модулі дуже багато функцій, які виконюють роботу з інтерфейсом і логікою програми.</p></li>
+</ul>
+<p>Модулі з класами
+* aircrafts.py - модуль з класами AircraftsNet i Aircraft, за допомогою яких обробляються дані про літаки, і з методами для пошуку літаків. Також там є функції для пошуку літаків і перекладу номеру рейсу
+* airports.py - модуль з класами AirportsNet i Airport, за допомогою яких обробляються дані про аеропорти, і з методами для пошуку аеропортів
+* delay.py - модуль з класом Delay, який містить методи, що обчислюють вірогідність затримки або відміни через delay rate
+* weather.py - модуль з класом Weather, де отримуються і зберігаються дані про погоду, з методами для перекладу даних у коефіцієнт ризику і збільшення вірогідності затримки або відміни рейсу.</p>
+<p>Модулі з АТД</p>
+<ul class="simple">
+<li><p>coordinates.py - модуль з абстрактним типом даних Corray для збереження координат, з методами _len_, _setitem_, _getitem_</p></li>
+</ul>
+<p>Тестові модулі для модулів з класами і абстрактними типами даних</p>
+<ul class="simple">
+<li><p>test_classes.py - модульні тести для модулів з класами</p></li>
+<li><p>test_coordinates.py - модульні тести для модуля з АТД</p></li>
+<li><p>coordinates_test.py - тестовий модуль для абстрактного типу даних</p></li>
+</ul>
+<p>Допоміжні модулі</p>
+<ul class="simple">
+<li><p>map.py - модуль з функціями і інструкціями для створення карти у формі html файлу</p></li>
+<li><p>news.py - модуль для пошуку даних з новинами з частиною інтерфейсу</p></li>
+<li><p>odd_deleter.py - модуль для досліджень який допоміг видалити лишні дані перетворити потрібні у правильний формат</p></li>
+<li><p>parsik.py - модуль для парсингу сайтів</p></li>
+</ul>
+<p>====== Коротка інструкція по користуванню програмою ======</p>
+<p>Програма працює тільки якщо налагодженно доступ до мережі Інтернет.
+Після запуску програми користувачу появляється екран з меню і головною частиною яка містить список країн. У списку потрібно вибрати цікаву користувачеві країну (можна скористатись динамічним пошуком над списком) і натиснути кнопку “Choode country”. Збоку з’явиться список з назвами аеропортів у цій країні. Так само вибираємо потрібний аеропорт (також можна скористатись пошуком) і натискаємо кнопку “Choose airport”. Знизу у полі “Selected Airport” появиться назва вибраного аеропорта. Натискаємо на кнопку “Departure”, якщо цей аеропорт є аеропортом відправлення або кнопку “Arrival”, якщо це є аеропортом прибуття. Дальше ми вибираємо дату. Є два варіанти: вибрати сьогоднішню дату (натиснути “Current date”) або власну, введену у потрібному форматі (YYYY-DD-MM) у відповідному полі і натиснувши на кнопку “Chosen date”. (!) Через обмеження використання Weather API погода при обчисленні буде враховуватись тільки при майбутній даті не більше 10 днів вперед (!) Після натиснення “Current date” або “Chosen date” потрібно дочекатись завершення обчислення. Зверху у правому кутку з’явиться повідомлення. Обчислення вважається завершеним коли дане повідомлення зникне. Бажано не нажимати нічого у робочому полі програми (може вилетіти). Обчилення можуть тривати кілька хвилин, адже береться багато інформації з різних джерел з мережі Інтернет. У процесі обчислення ми отримуємо табличку з даними, що нас цікавили. Для більшої інформаії про конкретний рейс можна нажати біля нього на кнопку “Info”. Також стане доступною можливість перегляду вибраного маршруту на карті (кнопка у верхньому меню - “Show route on map”) та посилання на Google Flights (кнопка у лівій частині екрану “Google Flights”).</p>
+<p>У лівій частині екрану доступні кнопки: “Weather” - для переходу на сайт з прогнозом погоди, “News” - для перегляду новин про останні інциденти та переходу на сайти новин аеропортів світу, “GitHub Repo.” - для переходу на цей репозиторій.</p>
+<p>Верхнє меню містить: кнопки “Fullscreen View” i “Windowed View” для повноекранного віконного режиму відповідно, кнопку “Change to Menubar” - для переключення на стандартне меню (зручніше, якщо змінювати розмір вікна), теперішню дату і час, червону кнопку виходу з програми.</p>
+<p>====== Опис тестових прикладів для первірки працездатності програми ======</p>
+<p>Тестові модулі test_classes.py i test_coordinates.py перевіряють працездатніть класів AircraftsNet, Aircrafts, Delay, Weather, Corray (АТД)
+Виконується перевірка чи методів. Варто зауважити, що класи Delay, Weather оперують змінними даними з інтернету і тому абсолютної перевірки зробити неможливо. Тому в таких випадках перевіряється коректність типів даних і якість самих даних.</p>
+<p>Для перевірки самої програми, скориставшись результатами експерименту, можна ввести у програму аеропорт Катовіце у Польщі як аеропорт відправлення та аеропорт Франкфурта у Німеччині, як аеропорт прибуття. Результат має бути: чотири рейси, три з одинаковою вірогіднісю, які здійснюються або оперуються однією авіалінією, яка використовує одинакові літаки (літаки можна перевірити на сайті, натиснувши на кнопку “Info”).</p>
+<p>Більше інформації у Wiki проекту <a class="reference external" href="https://github.com/Katerunner/Flights-Course-Work/wiki">https://github.com/Katerunner/Flights-Course-Work/wiki</a></p>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="searchik.html"
+                        title="previous chapter">searchik module</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/readme.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="searchik.html" title="searchik module"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Flight Status 1.0.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, Katerunner AT.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.0.1.
+    </div>
+  </body>
+</html>

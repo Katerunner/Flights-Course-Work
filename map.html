@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<head>    
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <script>L_PREFER_CANVAS=false; L_NO_TOUCH=false; L_DISABLE_3D=false;</script>
+    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.3.4/dist/leaflet.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.3.4/dist/leaflet.css"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css"/>
+    <link rel="stylesheet" href="https://rawcdn.githack.com/python-visualization/folium/master/folium/templates/leaflet.awesome.rotate.css"/>
+    <style>html, body {width: 100%;height: 100%;margin: 0;padding: 0;}</style>
+    <style>#map {position:absolute;top:0;bottom:0;right:0;left:0;}</style>
+    
+    <meta name="viewport" content="width=device-width,
+        initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <style>#map_b8b207f228d041b7b68e52f5f22ce59c {
+        position: relative;
+        width: 100.0%;
+        height: 100.0%;
+        left: 0.0%;
+        top: 0.0%;
+        }
+    </style>
+</head>
+<body>    
+    
+    <div class="folium-map" id="map_b8b207f228d041b7b68e52f5f22ce59c" ></div>
+</body>
+<script>    
+    
+    
+        var bounds = null;
+    
+
+    var map_b8b207f228d041b7b68e52f5f22ce59c = L.map(
+        'map_b8b207f228d041b7b68e52f5f22ce59c', {
+        center: [49.8125, 23.956100463867188],
+        zoom: 3,
+        maxBounds: bounds,
+        layers: [],
+        worldCopyJump: false,
+        crs: L.CRS.EPSG3857,
+        zoomControl: true,
+        });
+
+    
+    
+    var tile_layer_82fcdd4f4166465898ab6c0409f593c7 = L.tileLayer(
+        'https://{s}.tiles.mapbox.com/v3/mapbox.control-room/{z}/{x}/{y}.png',
+        {
+        "attribution": "Thank you",
+        "detectRetina": false,
+        "maxNativeZoom": 18,
+        "maxZoom": 18,
+        "minZoom": 0,
+        "noWrap": false,
+        "opacity": 1,
+        "subdomains": "abc",
+        "tms": false
+}).addTo(map_b8b207f228d041b7b68e52f5f22ce59c);
+    var tile_layer_dfd91b61bf2344c9ab2257c3effe83a3 = L.tileLayer(
+        'https://{s}.tiles.mapbox.com/v3/mapbox.world-bright/{z}/{x}/{y}.png',
+        {
+        "attribution": "Thank you",
+        "detectRetina": false,
+        "maxNativeZoom": 18,
+        "maxZoom": 18,
+        "minZoom": 0,
+        "noWrap": false,
+        "opacity": 1,
+        "subdomains": "abc",
+        "tms": false
+}).addTo(map_b8b207f228d041b7b68e52f5f22ce59c);
+    var tile_layer_a9d38b9acd6947c2bdce4218c1e3d202 = L.tileLayer(
+        'https://stamen-tiles-{s}.a.ssl.fastly.net/terrain/{z}/{x}/{y}.jpg',
+        {
+        "attribution": "Thank you",
+        "detectRetina": false,
+        "maxNativeZoom": 18,
+        "maxZoom": 18,
+        "minZoom": 0,
+        "noWrap": false,
+        "opacity": 1,
+        "subdomains": "abc",
+        "tms": false
+}).addTo(map_b8b207f228d041b7b68e52f5f22ce59c);
+    var tile_layer_a80889a305d844bb8a1bdecc45f02b87 = L.tileLayer(
+        'https://stamen-tiles-{s}.a.ssl.fastly.net/toner/{z}/{x}/{y}.png',
+        {
+        "attribution": "Thank you",
+        "detectRetina": false,
+        "maxNativeZoom": 18,
+        "maxZoom": 18,
+        "minZoom": 0,
+        "noWrap": false,
+        "opacity": 1,
+        "subdomains": "abc",
+        "tms": false
+}).addTo(map_b8b207f228d041b7b68e52f5f22ce59c);
+    var tile_layer_e2c8c29989b647dbba0791e5ca3fc95a = L.tileLayer(
+        'https://stamen-tiles-{s}.a.ssl.fastly.net/watercolor/{z}/{x}/{y}.jpg',
+        {
+        "attribution": "Thank you",
+        "detectRetina": false,
+        "maxNativeZoom": 18,
+        "maxZoom": 18,
+        "minZoom": 0,
+        "noWrap": false,
+        "opacity": 1,
+        "subdomains": "abc",
+        "tms": false
+}).addTo(map_b8b207f228d041b7b68e52f5f22ce59c);
+    var tile_layer_b4ff5f7c9bfa4f7b8145f1c561d63d64 = L.tileLayer(
+        'https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png',
+        {
+        "attribution": "Thank you",
+        "detectRetina": false,
+        "maxNativeZoom": 18,
+        "maxZoom": 18,
+        "minZoom": 0,
+        "noWrap": false,
+        "opacity": 1,
+        "subdomains": "abc",
+        "tms": false
+}).addTo(map_b8b207f228d041b7b68e52f5f22ce59c);
+    var tile_layer_15a89b4e166b416682e9e2a57830bc38 = L.tileLayer(
+        'https://cartodb-basemaps-{s}.global.ssl.fastly.net/dark_all/{z}/{x}/{y}.png',
+        {
+        "attribution": "Thank you",
+        "detectRetina": false,
+        "maxNativeZoom": 18,
+        "maxZoom": 18,
+        "minZoom": 0,
+        "noWrap": false,
+        "opacity": 1,
+        "subdomains": "abc",
+        "tms": false
+}).addTo(map_b8b207f228d041b7b68e52f5f22ce59c);
+    
+            var feature_group_fc7b675e422a4e3a9b1162b146cf1c15 = L.featureGroup(
+                ).addTo(map_b8b207f228d041b7b68e52f5f22ce59c);
+        
+    
+        var marker_5688cb851ec5459aa7faf172686c33bd = L.marker(
+            [49.8125, 23.956100463867188],
+            {
+                icon: new L.Icon.Default()
+                }
+            ).addTo(feature_group_fc7b675e422a4e3a9b1162b146cf1c15);
+        
+    
+
+                var custom_icon_38f5cadbce5d4f60b4664c29ae9e96f8 = L.icon({
+                    iconUrl: 'http://openweathermap.org/img/w/11d.png',
+                    iconSize: [40,40],
+                    
+
+                    
+                    
+                    
+
+                    
+                    });
+                marker_5688cb851ec5459aa7faf172686c33bd.setIcon(custom_icon_38f5cadbce5d4f60b4664c29ae9e96f8);
+            
+    
+            var popup_c6661d71627b428685eccb7ceeb5d2db = L.popup({maxWidth: '300'
+            
+            });
+
+            
+                var html_8729fa8f69c245b6b91be58182cc2971 = $(`<div id="html_8729fa8f69c245b6b91be58182cc2971" style="width: 100.0%; height: 100.0%;">Lviv International Airport<br><br>City: Lvov<br>Country: Ukraine<br>Weather: Thunderstorm with light rain</div>`)[0];
+                popup_c6661d71627b428685eccb7ceeb5d2db.setContent(html_8729fa8f69c245b6b91be58182cc2971);
+            
+
+            marker_5688cb851ec5459aa7faf172686c33bd.bindPopup(popup_c6661d71627b428685eccb7ceeb5d2db)
+            ;
+
+            
+        
+    
+        var marker_e1c9bcf2f3454af9a946333a029df8bc = L.marker(
+            [50.40194, 30.45194],
+            {
+                icon: new L.Icon.Default()
+                }
+            ).addTo(feature_group_fc7b675e422a4e3a9b1162b146cf1c15);
+        
+    
+
+                var custom_icon_f1f364c49a5b450c921cad0ce0c9a50f = L.icon({
+                    iconUrl: 'http://openweathermap.org/img/w/01d.png',
+                    iconSize: [40,40],
+                    
+
+                    
+                    
+                    
+
+                    
+                    });
+                marker_e1c9bcf2f3454af9a946333a029df8bc.setIcon(custom_icon_f1f364c49a5b450c921cad0ce0c9a50f);
+            
+    
+            var popup_238c3b36dd7d46caad2b65b36c06ce7a = L.popup({maxWidth: '300'
+            
+            });
+
+            
+                var html_7fc20b404c8c4f5fafc060307aeb963b = $(`<div id="html_7fc20b404c8c4f5fafc060307aeb963b" style="width: 100.0%; height: 100.0%;">Kiev Zhuliany International Airport<br><br>City: Kiev<br>Country: Ukraine<br>Weather: Clear sky</div>`)[0];
+                popup_238c3b36dd7d46caad2b65b36c06ce7a.setContent(html_7fc20b404c8c4f5fafc060307aeb963b);
+            
+
+            marker_e1c9bcf2f3454af9a946333a029df8bc.bindPopup(popup_238c3b36dd7d46caad2b65b36c06ce7a)
+            ;
+
+            
+        
+    
+        var marker_c7e40a1f28784d84b3f2a275b30a2e6d = L.marker(
+            [50.10722, 27.204020231933594],
+            {
+                icon: new L.Icon.Default()
+                }
+            ).addTo(feature_group_fc7b675e422a4e3a9b1162b146cf1c15);
+        
+    
+
+                var custom_icon_c3f30cb219554b1fa69997ca93d00587 = L.icon({
+                    iconUrl: 'https://www.forestgrove-or.gov/sites/default/files/imageattachments/community/page/3441/information-icon-29.png',
+                    iconSize: [20,20],
+                    
+
+                    
+                    
+                    
+
+                    
+                    });
+                marker_c7e40a1f28784d84b3f2a275b30a2e6d.setIcon(custom_icon_c3f30cb219554b1fa69997ca93d00587);
+            
+    
+            var popup_abc6a4d09277409b9883e3b143f0feca = L.popup({maxWidth: '300'
+            
+            });
+
+            
+                var html_81a62cf7c8c4406ca58790538d6377d9 = $(`<div id="html_81a62cf7c8c4406ca58790538d6377d9" style="width: 100.0%; height: 100.0%;">Distance: 467.9 km</div>`)[0];
+                popup_abc6a4d09277409b9883e3b143f0feca.setContent(html_81a62cf7c8c4406ca58790538d6377d9);
+            
+
+            marker_c7e40a1f28784d84b3f2a275b30a2e6d.bindPopup(popup_abc6a4d09277409b9883e3b143f0feca)
+            ;
+
+            
+        
+    
+            var layer_control_37e4785d165d4dcd889108082c4c6027 = {
+                base_layers : { "mapboxcontrolroom" : tile_layer_82fcdd4f4166465898ab6c0409f593c7,"Mapbox Bright" : tile_layer_dfd91b61bf2344c9ab2257c3effe83a3,"Stamen Terrain" : tile_layer_a9d38b9acd6947c2bdce4218c1e3d202,"Stamen Toner" : tile_layer_a80889a305d844bb8a1bdecc45f02b87,"Stamen Water Color" : tile_layer_e2c8c29989b647dbba0791e5ca3fc95a,"Cartodbpositron" : tile_layer_b4ff5f7c9bfa4f7b8145f1c561d63d64,"Cartodbdark Matter" : tile_layer_15a89b4e166b416682e9e2a57830bc38, },
+                overlays : { "Airports name" : feature_group_fc7b675e422a4e3a9b1162b146cf1c15, }
+                };
+            L.control.layers(
+                layer_control_37e4785d165d4dcd889108082c4c6027.base_layers,
+                layer_control_37e4785d165d4dcd889108082c4c6027.overlays,
+                {position: 'topright',
+                 collapsed: true,
+                 autoZIndex: true
+                }).addTo(map_b8b207f228d041b7b68e52f5f22ce59c);
+            
+                tile_layer_dfd91b61bf2344c9ab2257c3effe83a3.remove();
+                tile_layer_a9d38b9acd6947c2bdce4218c1e3d202.remove();
+                tile_layer_a80889a305d844bb8a1bdecc45f02b87.remove();
+                tile_layer_e2c8c29989b647dbba0791e5ca3fc95a.remove();
+                tile_layer_b4ff5f7c9bfa4f7b8145f1c561d63d64.remove();
+                tile_layer_15a89b4e166b416682e9e2a57830bc38.remove();
+        
+    
+                var poly_line_d738b71b41684e54b4e43e097a8332c9 = L.polyline(
+                    [[49.8125, 23.956100463867188], [50.40194, 30.45194]],
+                    {
+  "bubblingMouseEvents": true,
+  "color": "red",
+  "dashArray": null,
+  "dashOffset": null,
+  "fill": false,
+  "fillColor": "red",
+  "fillOpacity": 0.2,
+  "fillRule": "evenodd",
+  "lineCap": "round",
+  "lineJoin": "round",
+  "noClip": false,
+  "opacity": 0.3,
+  "smoothFactor": 1.0,
+  "stroke": true,
+  "weight": 5
+}
+                    )
+                    .addTo(map_b8b207f228d041b7b68e52f5f22ce59c);
+            
+</script>

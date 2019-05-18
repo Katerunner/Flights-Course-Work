@@ -355,7 +355,7 @@ def menu():
 
 menu()
 but_menu()
-print(air)
+# print(air)
 
 
 def link_to_flight(flight):
@@ -400,12 +400,12 @@ def pre_final_cur(inputed_date):
     pref.grid(row=10, columnspan=2)
     te_1 = parsik.flight(codes[0], codes[1], date)
     # No internet
-    print(te_1)
+    # print(te_1)
     if te_1 != ['Nothing found']:
         scrollbar = Scrollbar(table)
-        print(airnet.find_by_airname(airs[1]).code_3)
-        print(airnet.find_by_airname(airs[1]).lat)
-        print(airnet.find_by_airname(airs[1]).lon)
+        # print(airnet.find_by_airname(airs[1]).code_3)
+        # print(airnet.find_by_airname(airs[1]).lat)
+        # print(airnet.find_by_airname(airs[1]).lon)
 
         weath = weather.Weather()
         temp = airnet.find_by_airname(airs[1])
@@ -423,11 +423,11 @@ def pre_final_cur(inputed_date):
             except:
                 pass
             for_info.append(te_1[i][0])
-            print("\n______________TE1_____________")
-            print(te_1)
+            # print("\n______________TE1_____________")
+            # print(te_1)
             try:
                 agp = aircrafts.get_plane(te_1[i][0])
-                print(agp)
+                # print(agp)
                 deli = aicnet.delay_extender(delik, agp[0])
             except Exception as a:
                 raise a
@@ -486,7 +486,7 @@ def pre_final_cur(inputed_date):
             info_b.bind("<Leave>", lambda e: e.widget.config(relief=GROOVE))
             root.update()
     else:
-        print("i'm here")
+        # print("i'm here")
         Label(table, text="Nothing found", width=112, bg='yellow').grid(row=0, column=0)
     info_wait_destroy()
 
@@ -499,7 +499,7 @@ def set_depar():
     L2 = Label(main, text='From: ' + air + " (" + str(codes[0]) + ")", width=55, bg='aliceblue')
     L2.grid(row=6)
     date_ch()
-    print(codes)
+    # print(codes)
 
 
 def set_arriv():
@@ -510,7 +510,7 @@ def set_arriv():
     L3 = Label(main, text='To: ' + air + " (" + str(codes[1]) + ")", width=55, bg='aliceblue')
     L3.grid(row=6, column=1)
     date_ch()
-    print(codes)
+    # print(codes)
 
 
 def upd_con():
@@ -528,7 +528,7 @@ def upd_con():
         En2.grid(row=1, column=1)
     except:
         pass
-    print(Lb1.curselection()[0])
+    # print(Lb1.curselection()[0])
     cursl = sorted([(i.city, i.name) for i in airnet.airdat if i.country == countries[::-1][Lb1.curselection()[0]]])
     country = cursl
     # print(cursl)
@@ -596,7 +596,7 @@ def upd_air():
     L1.grid(row=4, columnspan=2)
     B3.grid(row=5, column=0)
     B4.grid(row=5, column=1)
-    print(country)
+    # print(country)
 
 
 countries = []
@@ -710,7 +710,7 @@ def date_ch():
             i.bind("<Enter>", lambda e: e.widget.config(relief=RIDGE))
             i.bind("<Leave>", lambda e: e.widget.config(relief=RAISED))
 
-        print(airs)
+        # print(airs)
 
 
 def but_manage():

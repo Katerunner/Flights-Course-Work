@@ -24,7 +24,7 @@ class AircraftsNet:
     def __init__(self):
         """Initialization"""
         self.craft_dat = []
-        with open('aircrafts.csv', 'r') as (f):
+        with open('bin/aircrafts.csv', 'r') as (f):
             for i in f:
                 line = i.strip().split(';')
                 self.craft_dat.append(Aircraft(line[0], line[2]))
@@ -58,7 +58,7 @@ def format_flight(flight):
     try:
         let = flight[:2]
         num = int(flight[2:])
-        with open('airlines_translator.csv', 'r') as (f):
+        with open('bin/airlines_translator.csv', 'r') as (f):
             for i in f:
                 line = i.strip().split(';')
                 if line[0] == let:

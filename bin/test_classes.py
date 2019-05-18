@@ -1,8 +1,8 @@
 from unittest import TestCase
-from weather import *
-from airports import *
-from aircrafts import *
-from delay import *
+from bin.weather import *
+from bin.airports import *
+from bin.aircrafts import *
+from bin.delay import *
 import unittest
 
 class TestWeather(TestCase):

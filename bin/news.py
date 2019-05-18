@@ -9,14 +9,6 @@ headers = {'User-Agent': 'Mozilla/5.0'}
 page = requests.get(url)
 soup = BeautifulSoup(page.text, "html.parser")
 titles = ["Date", "Airplane", "Fligth", "Airline", "Fatalities", "Airport"]
-#
-# def get_html(url):
-#     response = urllib.request.urlopen(url)
-#     return response.read()
-#
-#
-# def parse(html):
-#     soup = BeautifulSoup(html, features="html.parser")
 table = soup.find_all('table')
 rows = table[2].find_all('tr')
 result = []
@@ -43,7 +35,7 @@ def news_f():
     """Shows news with interface"""
     root2 = Tk()
     root2.title('News')
-    root2.iconbitmap('airplane.ico')
+    root2.iconbitmap('graphics/airplane.ico')
     main2 = Frame(root2, bg="aliceblue")
     main2.pack(fill=X)
     title = Label(main2, width=50, text="Latest Safety Occurrences", font=('Marcellus SC', 12), bg='aliceblue',

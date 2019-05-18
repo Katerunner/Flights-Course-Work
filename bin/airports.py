@@ -1,7 +1,7 @@
 class AirportsNet:
     """Represents the net of the airports"""
 
-    def __init__(self, name='default_net', filename='airports.dat'):
+    def __init__(self, name='default_net', filename='bin/airports.dat'):
         self.name = name
         self.airdat = []
         with open(filename, 'r', encoding='utf-8') as (f):

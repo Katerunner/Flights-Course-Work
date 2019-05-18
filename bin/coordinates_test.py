@@ -1,4 +1,4 @@
-from coordinates import *
+from bin.coordinates import *
 
 a = Corray(1.56, 2.234)
 print('Latitude:', a['lat'])

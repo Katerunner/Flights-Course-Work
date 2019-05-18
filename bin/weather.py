@@ -1,6 +1,5 @@
 import json
 import urllib.request
-from coordinates import Corray
 
 api = "5bbba82fc9d0f4ff8427b5e8e90e2cde"
 if api == "":
@@ -15,7 +14,7 @@ class Weather:
         self.dat = {}
         self.description = 'light snow'
 
-        with open("weather.csv", 'r') as f:
+        with open("bin/weather.csv", 'r') as f:
             for i in f:
                 temp = i.strip().split(";")
                 self.dat[temp[1]] = [temp[2], temp[3]]

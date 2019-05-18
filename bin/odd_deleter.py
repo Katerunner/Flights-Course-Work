@@ -1,5 +1,5 @@
-with open("airlines_translator.csv", 'w') as o:
-    with open("airlines.csv", 'r') as f:
+with open("bin/airlines_translator.csv", 'w') as o:
+    with open("bin/airlines.csv", 'r') as f:
         for i in f:
             line = i.strip().split(";")[:2]
             if line[0] != '' and line[1] != '':

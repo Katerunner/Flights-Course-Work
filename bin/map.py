@@ -5,9 +5,9 @@
 # geocode = RateLimiter(geolocator.geocode, min_delay_seconds=1)
 import random
 import folium
-import weather
-import airports
-from coordinates import Corray
+import bin.weather as weather
+import bin.airports as airports
+from bin.coordinates import Corray
 import math
 
 
@@ -79,11 +79,6 @@ def update_map(c_dep, c_arr):
         "https://www.forestgrove-or.gov/sites/default/files/imageattachments/community/page/3441/information-icon-29.png",
         icon_size=(20, 20))
 
-    # folium.Marker([43, -79],
-    #               popup='Iron Man',
-    #               icon=icon
-    #               ).add_to(map)
-
     pop_dep = dep.name + "<br><br>City: " + dep.city + "<br>Country: " + dep.country + "<br>Weather: " + dep_w.description.capitalize()
     ap_group.add_child(folium.Marker(location=[dep.lat, dep.lon], popup=pop_dep, icon=icon_dep))
 
@@ -95,19 +90,6 @@ def update_map(c_dep, c_arr):
         icon=icon_info, location=[(arr_c['lat'] + dep_c['lat']) / 2, (arr_c['lon'] + dep_c['lon']) / 2], popup=pop_len))
 
     folium.PolyLine(locations=[[dep_c['lat'], dep_c['lon']], [arr_c['lat'], arr_c['lon']]], color='red', weight=5, opacity=0.3).add_to(map)
-
-    # with open('airports.dat', 'r', encoding='utf-8') as f:
-    #     for i in f:
-    #         try:
-    #             lat = float(i.strip().split(",")[6])
-    #             lon = float(i.strip().split(",")[7])
-    #             pop = (str(i.strip().split(",")[2]) + ", " + str(i.strip().split(",")[3]) + ", " + str(
-    #                 i.strip().split(",")[5])).replace('"', "").replace('"', "")
-    #             # pop = pop.encode(encoding='UTF-8',errors='xmlcharrefreplace')
-    #             print(i.strip().split(",")[0])
-    #             we_group.add_child(folium.Circle(radius=110, location=[lat, lon], popup=pop, fill=False, color='red'))
-    #         except:
-    #             print('err')
     map.save("map.html")
 
 # update_map("FRA", "IEV")

@@ -1,5 +1,5 @@
 from unittest import TestCase
-from coordinates import *
+from bin.coordinates import *
 import unittest
 
 

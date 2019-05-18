@@ -15,10 +15,10 @@ def internet_on():
 
 load_root = Tk()
 load_root.title('Flight Status')
-load_root.iconbitmap('airplane.ico')
+load_root.iconbitmap('graphics/airplane.ico')
 load_root.geometry("900x500")
 load_root.state('zoomed')
-load_image = PhotoImage(file="load.gif")
+load_image = PhotoImage(file="graphics/load.gif")
 load_label = Label(load_root, image=load_image)
 load_label.place(x=0, y=0, relwidth=1, relheight=1)
 width = load_root.winfo_screenwidth()
@@ -29,7 +29,7 @@ load_root.update()
 if not internet_on():
     load_label.destroy()
     del load_label
-    load_image = PhotoImage(file="no_inter.gif")
+    load_image = PhotoImage(file="graphics/no_inter.gif")
     load_label = Label(load_root, image=load_image)
     load_label.place(x=0, y=0, relwidth=1, relheight=1)
     load_root.update()
@@ -44,23 +44,24 @@ if not internet_on():
 # ============== Imports ==============
 
 try:
-    import airports
-    import aircrafts
-    import delay
-    import weather
+    import bin.airports as airports
+    import bin.aircrafts as aircrafts
+    import bin.delay as delay
+    import bin.weather as weather
+    import bin.coordinates as coordinates
+    from bin.coordinates import Corray
     from functools import partial
-    import map
+    import bin.map as map
     import datetime
     import time
-    import news
-    from coordinates import Corray
+    import bin.news as news
     import webbrowser
     import os
     import urllib.request
     import io
-    import parsik
+    import bin.parsik as parsik
     import copy
-    import searchik
+    import bin.searchik as searchik
 
 except Exception as b:
     print("Please check all files or install missing")
@@ -87,10 +88,10 @@ root = Tk()
 airnet = airports.AirportsNet()
 aicnet = aircrafts.AircraftsNet()
 root.title('Flight Status')
-root.iconbitmap('airplane.ico')
+root.iconbitmap('graphics/airplane.ico')
 root.geometry("900x500")
 root.state('zoomed')
-background_image = PhotoImage(file="bg0.gif")
+background_image = PhotoImage(file="graphics/bg0.gif")
 background_label = Label(root, image=background_image)
 background_label.place(x=0, y=0, relwidth=1, relheight=1)
 # root.overrideredirect(True)
@@ -229,7 +230,7 @@ def but_menu():
     main.pack()
 
     # Marcellus Sk
-    im_showflight = Image.open("map_show_b.jpg")
+    im_showflight = Image.open("graphics/map_show_b.jpg")
     image_showflight = ImageTk.PhotoImage(im_showflight)
     showflight = Button(top_menu, bg='skyblue', width=328, height=33, text="Show flight on map", cursor="hand2",
                         image=image_showflight,
@@ -237,7 +238,7 @@ def but_menu():
     showflight.image = image_showflight
     showflight.grid(column=0, row=0)
 
-    im_fulls = Image.open("fulls_b.jpg")
+    im_fulls = Image.open("graphics/fulls_b.jpg")
     image_fulls = ImageTk.PhotoImage(im_fulls)
     fulls = Button(top_menu, bg='skyblue', width=328, height=33, text="Fullscreen view ", cursor="hand2",
                    image=image_fulls,
@@ -245,14 +246,14 @@ def but_menu():
     fulls.image = image_fulls
     fulls.grid(column=1, row=0)
 
-    im_wind = Image.open("wind_b.jpg")
+    im_wind = Image.open("graphics/wind_b.jpg")
     image_wind = ImageTk.PhotoImage(im_wind)
     wind = Button(top_menu, bg='skyblue', width=328, height=33, text="Windowed view", cursor="hand2", image=image_wind,
                   command=overd_f)
     wind.image = image_wind
     wind.grid(column=2, row=0)
 
-    im_menu = Image.open("menu_b.jpg")
+    im_menu = Image.open("graphics/menu_b.jpg")
     image_menu = ImageTk.PhotoImage(im_menu)
     menu_b = Button(top_menu, bg='skyblue', width=328, height=33, text="Change to menubar", cursor="hand2",
                     image=image_menu, command=menu)
@@ -296,7 +297,7 @@ def but_menu():
         print(a)
 
     Label(top_menu, bg='aliceblue', width=11).grid(column=8, row=0)
-    im_exit = Image.open("exit_b.jpg")
+    im_exit = Image.open("graphics/exit_b.jpg")
     image_exit = ImageTk.PhotoImage(im_exit)
     exit_b = Button(top_menu, bg='red', image=image_exit, width=43, height=33, text="Exit", cursor="hand2",
                     command=root.quit)
@@ -474,7 +475,7 @@ def pre_final_cur(inputed_date):
                   highlightbackground="deepskyblue", highlightcolor="deepskyblue", ).grid(row=i, column=6)
 
             action_with_arg = partial(link_to_flight, for_info[i])
-            im_info = Image.open("info_b.jpg")
+            im_info = Image.open("graphics/info_b.jpg")
             image_info = ImageTk.PhotoImage(im_info)
             info_b = Button(table, text=i, width=83, height=20, image=image_info, bg="aliceblue", justify=LEFT,
                             relief=GROOVE, borderwidth=2,
